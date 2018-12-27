@@ -3,9 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="dialog"
-            type="com.github.windsekirun.naraesftp.controller.ConnectionAddDialog"/>
+            type="com.github.windsekirun.naraesftp.connection.ConnectionAddDialog" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,6 +37,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:hint="@string/connection_add_item_title"
+            android:textColorHint="@color/warm_grey"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4">
@@ -43,8 +45,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={dialog.title}"
                 android:singleLine="true"
+                android:text="@={dialog.title}"
                 android:textColor="@color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -58,6 +60,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:hint="@string/connection_add_item_host"
+            android:textColorHint="@color/warm_grey"
             app:layout_constraintEnd_toStartOf="@+id/textInputLayout5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
@@ -65,8 +68,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={dialog.host}"
                 android:singleLine="true"
+                android:text="@={dialog.host}"
                 android:textColor="@color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -79,6 +82,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:hint="@string/connection_add_item_port"
+            android:textColorHint="@color/warm_grey"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
 
@@ -86,8 +90,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:text="@={dialog.port}"
                 android:singleLine="true"
+                android:text="@={dialog.port}"
                 android:textColor="@color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -102,15 +106,16 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:hint="@string/connection_add_item_user"
+            android:textColorHint="@color/warm_grey"
             app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:text="@={dialog.user}"
-                android:layout_height="wrap_content"
                 android:textColor="@color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -124,8 +129,9 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:hint="@string/connection_add_item_password"
-            app:layout_constraintStart_toEndOf="@+id/guideline"
+            android:textColorHint="@color/warm_grey"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -145,8 +151,8 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
-            android:onClick="@{dialog::clickConfirm}"
             android:background="@drawable/circle_btn"
+            android:onClick="@{dialog::clickConfirm}"
             android:src="@drawable/ic_check_white_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/textInputLayout4"
@@ -156,9 +162,9 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginTop="16dp"
-            android:onClick="@{dialog::clickClose}"
             android:layout_marginEnd="16dp"
             android:background="@drawable/circle_btn"
+            android:onClick="@{dialog::clickClose}"
             android:src="@drawable/ic_close_white_24dp"
             app:layout_constraintEnd_toStartOf="@+id/imageButton"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout4" />

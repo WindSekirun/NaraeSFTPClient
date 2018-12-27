@@ -10,6 +10,7 @@ import com.github.windsekirun.naraesftp.R
 import com.github.windsekirun.naraesftp.controller.ConnectionInfoController
 import com.github.windsekirun.naraesftp.controller.SessionController
 import com.github.windsekirun.naraesftp.data.ConnectionInfoItem
+import com.github.windsekirun.naraesftp.event.CloseProgressIndicatorDialog
 import com.github.windsekirun.naraesftp.event.OpenConfirmDialog
 import com.github.windsekirun.naraesftp.event.OpenConnectionAddDialog
 import com.github.windsekirun.naraesftp.event.OpenProgressIndicatorDialog
@@ -58,6 +59,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
         sessionController.connectionInfo = item
         sessionController.callback = F1 { it ->
+            postEvent(CloseProgressIndicatorDialog())
             if (it) {
                 showSuccessConnection(item)
                 sessionController.callback = null

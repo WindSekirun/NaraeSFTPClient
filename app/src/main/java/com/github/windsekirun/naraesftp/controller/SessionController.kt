@@ -7,7 +7,9 @@ import com.github.windsekirun.naraesftp.data.ConnectionInfoItem
 import com.jcraft.jsch.JSch
 import com.jcraft.jsch.Session
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.impl.F1
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import java.io.File
@@ -86,9 +88,14 @@ class SessionController(val sFtpController: SFtpController) {
             it.onNext(true)
         }.flatMap { Observable.interval(2, TimeUnit.SECONDS) }
             .flatMap { Observable.just(session.isConnected) }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data, throwable ->
-                Log.e(TAG, "message: ${throwable?.message}", throwable)
-                runOnUiThread { callback?.invoke(data) }
+                if (data != null) {
+                    runOnUiThread { callback?.invoke(data) }
+                } else if (throwable != null) {
+                    Log.e(TAG, "message: ${throwable.message}", throwable)
+                }
             }
     }
 

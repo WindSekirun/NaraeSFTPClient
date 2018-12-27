@@ -13,4 +13,12 @@
     <string name="connection_success_autoconnect">연결에 성공하였습니다!\n다음에도 이 정보로 연결할까요?</string>
     <string name="file_list_disconnected">연결이 끊어졌습니다. 연결 화면으로 이동합니다.</string>
     <string name="file_list_loading">파일 목록을 가져오고 있습니다.</string>
+    <string name="menu_file_disconnect">연결 해제</string>
+    <string name="file_list_logout">로그아웃 하시겠습니까?</string>
+    <string name="file_list_double_back">한번 더 누르면 앱을 종료합니다.</string>
+    <string name="file_list_confirm_dialog">%s 파일이 %s에 저장됩니다. \n 다운로드 하시겠습니까?</string>
+    <string name="file_list_failed">파일 다운로드에 실패했습니다.</string>
+    <string name="file_list_open">다운로드가 완료되었습니다. 바로 실행할까요?</string>
+    <string name="file_list_downloading">파일 다운로드 중입니다.</string>
+    <string name="file_list_market">열 수 있는 앱이 없어 마켓으로 이동합니다.</string>
 </resources>

@@ -5,12 +5,8 @@ import android.os.Bundle
 import com.github.windsekirun.baseapp.base.BaseActivity
 import com.github.windsekirun.daggerautoinject.InjectActivity
 import com.github.windsekirun.naraesftp.R
-import com.github.windsekirun.naraesftp.controller.ConnectionAddDialog
 import com.github.windsekirun.naraesftp.databinding.ConnectionActivityBinding
-import com.github.windsekirun.naraesftp.event.ClickConnectionItemEvent
-import com.github.windsekirun.naraesftp.event.OpenConfirmDialog
-import com.github.windsekirun.naraesftp.event.OpenConnectionAddDialog
-import com.github.windsekirun.naraesftp.event.OpenProgressIndicatorDialog
+import com.github.windsekirun.naraesftp.event.*
 import com.github.windsekirun.naraesftp.progress.ConfirmDialog
 import com.github.windsekirun.naraesftp.progress.ProgressIndicatorDialog
 import org.greenrobot.eventbus.Subscribe
@@ -27,6 +23,8 @@ import org.greenrobot.eventbus.Subscribe
 @InjectActivity
 class ConnectionActivity : BaseActivity<ConnectionActivityBinding>() {
     lateinit var viewModel: ConnectionViewModel
+
+    private var progressIndicatorDialog: ProgressIndicatorDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,11 +48,16 @@ class ConnectionActivity : BaseActivity<ConnectionActivityBinding>() {
 
     @Subscribe
     fun onProgressIndicatorDialog(event: OpenProgressIndicatorDialog) {
-        ProgressIndicatorDialog.show(this, event.message)
+        progressIndicatorDialog = ProgressIndicatorDialog.show(this, event.message)
+    }
+
+    @Subscribe
+    fun onCloseProgressIndicatorDialog(event: CloseProgressIndicatorDialog) {
+        progressIndicatorDialog?.dismiss()
     }
 
     @Subscribe
     fun onOpenConfirmDialog(event: OpenConfirmDialog) {
-        ConfirmDialog.show(this, event.message, event.callback)
+        ConfirmDialog.show(this, event.message, event.callback, event.closeCallback)
     }
 }

@@ -1,4 +1,4 @@
-package com.github.windsekirun.naraesftp.controller
+package com.github.windsekirun.naraesftp.connection
 
 import android.app.Dialog
 import android.os.Bundle
@@ -20,7 +20,7 @@ class ConnectionAddDialog : BaseBottomSheetDialogFragment<ConnectionAddDialogBin
     val host = ObservableString()
     val user = ObservableString()
     val password = ObservableString()
-    val port = ObservableString()
+    val port = ObservableString("22")
 
     lateinit var callback: (ConnectionInfoItem) -> Unit
 

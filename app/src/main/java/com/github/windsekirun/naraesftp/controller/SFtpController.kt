@@ -93,7 +93,7 @@ class SFtpController {
                 emitter.onError(IOException("Cannot fetch items"))
             } else {
                 // safe cast instead unchecked cast because type parameter of [files] is Any
-                val list = files.filterIsInstance(ChannelSftp.LsEntry::class.java)
+                val list = files.filterIsInstance(ChannelSftp.LsEntry::class.java).sortedBy { it.filename }
                 emitter.onNext(list)
             }
         }

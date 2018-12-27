@@ -10,6 +10,7 @@ import android.widget.Toast
 import com.github.windsekirun.baseapp.module.recycler.BaseRecyclerAdapter
 import com.github.windsekirun.naraesftp.R
 import com.github.windsekirun.naraesftp.databinding.FileListItemBinding
+import com.github.windsekirun.naraesftp.event.ClickEntryItemEvent
 import com.jcraft.jsch.ChannelSftp
 
 /**
@@ -27,7 +28,7 @@ class FileListItemAdapter : BaseRecyclerAdapter<ChannelSftp.LsEntry, FileListIte
     }
 
     override fun onClickedItem(binding: FileListItemBinding, item: ChannelSftp.LsEntry, position: Int) {
-
+        postEvent(ClickEntryItemEvent(item))
     }
 
     override fun onLongClickedItem(binding: FileListItemBinding, item: ChannelSftp.LsEntry, position: Int): Boolean {

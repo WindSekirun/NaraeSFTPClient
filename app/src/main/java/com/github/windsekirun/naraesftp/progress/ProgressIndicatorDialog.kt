@@ -28,13 +28,15 @@ class ProgressIndicatorDialog : BaseBottomSheetDialogFragment<ProgressIndicatorD
     }
 
     companion object {
-        fun show(activity: AppCompatActivity, message: String) {
+        fun show(activity: AppCompatActivity, message: String): ProgressIndicatorDialog {
             val fragment = ProgressIndicatorDialog().apply {
                 this.message.set(message)
             }
 
             activity.supportFragmentManager.beginTransaction()
                 .add(fragment, "progress-indicator").commit()
+
+            return fragment
         }
     }
 }

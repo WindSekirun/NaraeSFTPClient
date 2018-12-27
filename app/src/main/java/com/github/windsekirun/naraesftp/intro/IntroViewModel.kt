@@ -9,6 +9,7 @@ import com.github.windsekirun.naraesftp.connection.ConnectionActivity
 import com.github.windsekirun.naraesftp.controller.ConnectionInfoController
 import com.github.windsekirun.naraesftp.controller.SessionController
 import com.github.windsekirun.naraesftp.data.ConnectionInfoItem
+import com.github.windsekirun.naraesftp.event.CloseProgressIndicatorDialog
 import com.github.windsekirun.naraesftp.event.OpenProgressIndicatorDialog
 import com.github.windsekirun.naraesftp.file.FileListActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -62,6 +63,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
         sessionController.connectionInfo = item
         sessionController.callback = F1 { it ->
+            postEvent(CloseProgressIndicatorDialog())
             if (it) {
                 moveFileListActivity(true, item)
                 sessionController.callback = null

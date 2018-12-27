@@ -6,8 +6,10 @@ import com.github.windsekirun.baseapp.base.BaseActivity
 import com.github.windsekirun.daggerautoinject.InjectActivity
 import com.github.windsekirun.naraesftp.R
 import com.github.windsekirun.naraesftp.databinding.FileListActivityBinding
-import com.github.windsekirun.naraesftp.event.OpenProgressIndicatorDialog
+import com.github.windsekirun.naraesftp.event.*
+import com.github.windsekirun.naraesftp.progress.ConfirmDialog
 import com.github.windsekirun.naraesftp.progress.ProgressIndicatorDialog
+import com.github.windsekirun.naraesftp.progress.ProgressIndicatorPercentDialog
 import org.greenrobot.eventbus.Subscribe
 
 /**
@@ -21,19 +23,46 @@ import org.greenrobot.eventbus.Subscribe
 
 @InjectActivity
 class FileListActivity : BaseActivity<FileListActivityBinding>() {
-    lateinit var mViewModel: FileListViewModel
+    lateinit var viewModel: FileListViewModel
+    private var progressIndicatorDialog: ProgressIndicatorDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.file_list_activity)
-        mViewModel = getViewModel(FileListViewModel::class.java)
-        mBinding.viewModel = mViewModel
+        viewModel = getViewModel(FileListViewModel::class.java)
+        mBinding.viewModel = viewModel
 
         initRecyclerView(mBinding.recyclerView, FileListItemAdapter::class.java)
+        mBinding.toolbar.inflateMenu(R.menu.menu_filelist)
+    }
+
+    override fun onBackPressed() {
+        viewModel.onBackPressed()
     }
 
     @Subscribe
     fun onProgressIndicatorDialog(event: OpenProgressIndicatorDialog) {
-        ProgressIndicatorDialog.show(this, event.message)
+        progressIndicatorDialog = ProgressIndicatorDialog.show(this, event.message)
+    }
+
+    @Subscribe
+    fun onCloseProgressIndicatorDialog(event: CloseProgressIndicatorDialog) {
+        progressIndicatorDialog?.dismiss()
+    }
+
+    @Subscribe
+    fun onOpenConfirmDialog(event: OpenConfirmDialog) {
+        ConfirmDialog.show(this, event.message, event.callback, event.closeCallback)
+    }
+
+    @Subscribe
+    fun onClickEntryItemEvent(event: ClickEntryItemEvent) {
+        viewModel.clickEntry(event.item)
+    }
+
+    @Subscribe
+    fun onOpenProgressIndicatorPercentDialog(event: OpenProgressIndicatorPercentDialog) {
+        val dialog = ProgressIndicatorPercentDialog.show(this, event.message)
+        viewModel.startDownload(dialog, event.item)
     }
 }
