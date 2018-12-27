@@ -9,6 +9,12 @@ import com.jcraft.jsch.ChannelSftp
 class ClickConnectionItemEvent(val item: ConnectionInfoItem)
 
 /**
+ * Event class for Longclick [ConnectionInfoItem]
+ */
+class ClickLongConnectionItemEvent(val item: ConnectionInfoItem)
+
+
+/**
  * Event class for click [ChannelSftp.LsEntry]
  */
 class ClickEntryItemEvent(val item: ChannelSftp.LsEntry)

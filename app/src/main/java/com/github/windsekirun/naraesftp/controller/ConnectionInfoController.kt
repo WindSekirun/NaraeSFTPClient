@@ -98,4 +98,14 @@ class ConnectionInfoController(val application: MainApplication) {
             emitter.onSuccess(item.id)
         }
     }
+
+    /**
+     * remove connection info
+     */
+    fun removeConnectionInfo(id: Long): Single<Boolean> {
+        return Single.create {
+            box.remove(id)
+            it.onSuccess(true)
+        }
+    }
 }

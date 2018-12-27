@@ -9,6 +9,7 @@ import com.github.windsekirun.naraesftp.R
 import com.github.windsekirun.naraesftp.data.ConnectionInfoItem
 import com.github.windsekirun.naraesftp.databinding.ConnectionItemBinding
 import com.github.windsekirun.naraesftp.event.ClickConnectionItemEvent
+import com.github.windsekirun.naraesftp.event.ClickLongConnectionItemEvent
 
 /**
  * NaraeSFTPClient
@@ -29,7 +30,8 @@ class ConnectionItemAdapter : BaseRecyclerAdapter<ConnectionInfoItem, Connection
     }
 
     override fun onLongClickedItem(binding: ConnectionItemBinding, item: ConnectionInfoItem, position: Int): Boolean {
-        return false
+        postEvent(ClickLongConnectionItemEvent(item))
+        return true
     }
 
     override fun createBinding(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): ViewDataBinding {

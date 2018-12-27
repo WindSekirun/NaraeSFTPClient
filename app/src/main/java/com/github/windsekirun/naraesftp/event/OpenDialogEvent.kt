@@ -9,6 +9,11 @@ import com.jcraft.jsch.ChannelSftp
 class OpenConnectionAddDialog(val callback: (ConnectionInfoItem) -> Unit)
 
 /**
+ * Event class for open ConnectionEditDialog
+ */
+class OpenConnectionEditDialog(val item: ConnectionInfoItem, val callback: (Int, ConnectionInfoItem) -> Unit)
+
+/**
  * Event class for open ProgressIndicatorDialog
  */
 class OpenProgressIndicatorDialog(val message: String)

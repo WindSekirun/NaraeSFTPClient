@@ -10,10 +10,7 @@ import com.github.windsekirun.naraesftp.R
 import com.github.windsekirun.naraesftp.controller.ConnectionInfoController
 import com.github.windsekirun.naraesftp.controller.SessionController
 import com.github.windsekirun.naraesftp.data.ConnectionInfoItem
-import com.github.windsekirun.naraesftp.event.CloseProgressIndicatorDialog
-import com.github.windsekirun.naraesftp.event.OpenConfirmDialog
-import com.github.windsekirun.naraesftp.event.OpenConnectionAddDialog
-import com.github.windsekirun.naraesftp.event.OpenProgressIndicatorDialog
+import com.github.windsekirun.naraesftp.event.*
 import com.github.windsekirun.naraesftp.file.FileListActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
@@ -72,6 +69,18 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         sessionController.connect()
     }
 
+    fun clickConnectionLong(connectionInfoItem: ConnectionInfoItem) {
+        val event = OpenConnectionEditDialog(connectionInfoItem) { state, item ->
+            if (state == -1) {
+                removeConnection(connectionInfoItem)
+            } else {
+                editConnection(connectionInfoItem)
+            }
+        }
+
+        postEvent(event)
+    }
+
     private fun loadData() {
         connectionInfoController.getListConnectionInfo()
             .subscribeOn(Schedulers.io())
@@ -84,6 +93,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                 if (data.isEmpty()) {
                     addNewConnection()
                 } else {
+                    connectionItems.clear()
                     connectionItems.addAll(data)
                 }
             }.addTo(compositeDisposable)
@@ -136,6 +146,34 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                 sessionController.connectionInfo = data
                 startActivity(FileListActivity::class.java)
                 finishAllActivities()
+            }.addTo(compositeDisposable)
+    }
+
+    private fun removeConnection(connectionInfoItem: ConnectionInfoItem) {
+        connectionInfoController.removeConnectionInfo(connectionInfoItem.id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { data, error ->
+                if (error != null || data == null) {
+                    return@subscribe
+                }
+
+                showToast(getString(R.string.connection_removed))
+                loadData()
+            }.addTo(compositeDisposable)
+    }
+
+    private fun editConnection(connectionInfoItem: ConnectionInfoItem) {
+        connectionInfoController.addConnectionInfo(connectionInfoItem)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { data, error ->
+                if (error != null || data == null) {
+                    return@subscribe
+                }
+
+                showToast(getString(R.string.connection_edited))
+                loadData()
             }.addTo(compositeDisposable)
     }
 }

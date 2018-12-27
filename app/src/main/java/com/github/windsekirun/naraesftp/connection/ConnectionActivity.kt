@@ -42,6 +42,11 @@ class ConnectionActivity : BaseActivity<ConnectionActivityBinding>() {
     }
 
     @Subscribe
+    fun onOpenConnectionEditDialog(event: OpenConnectionEditDialog) {
+        ConnectionEditDialog.show(this, event.item, event.callback)
+    }
+
+    @Subscribe
     fun onClickConnectionItemEvent(event: ClickConnectionItemEvent) {
         viewModel.tryConnection(event.item)
     }
@@ -59,5 +64,10 @@ class ConnectionActivity : BaseActivity<ConnectionActivityBinding>() {
     @Subscribe
     fun onOpenConfirmDialog(event: OpenConfirmDialog) {
         ConfirmDialog.show(this, event.message, event.callback, event.closeCallback)
+    }
+
+    @Subscribe
+    fun onClickLongConnectionItemEvent(event: ClickLongConnectionItemEvent) {
+        viewModel.clickConnectionLong(event.item)
     }
 }

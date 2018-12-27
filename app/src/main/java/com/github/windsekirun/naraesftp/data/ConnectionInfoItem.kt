@@ -23,6 +23,7 @@ class ConnectionInfoItem : UserInfo {
     var title: String = ""
     var port: Int = 0
 
+    var initialDirectory: String = "/"
     var lastConnectionTime: Date = Date()
     var autoConnect: Boolean = false
 
