@@ -46,6 +46,8 @@ class ConnectionEditDialog : BaseBottomSheetDialogFragment<ConnectionEditDialogB
         if (::callback.isInitialized) {
             callback.invoke(-1, item.get() ?: ConnectionInfoItem())
         }
+
+        dismiss()
     }
 
     fun clickConfirm(view: View) {
@@ -55,7 +57,7 @@ class ConnectionEditDialog : BaseBottomSheetDialogFragment<ConnectionEditDialogB
             this.user = this@ConnectionEditDialog.user.get()
             this.pw = this@ConnectionEditDialog.password.get()
             this.port = this@ConnectionEditDialog.port.get().safeInt()
-            this.initialDirectory = this@ConnectionEditDialog.directory.get()
+            this.initialDirectory = (this@ConnectionEditDialog.directory.get())
         }
 
         if (::callback.isInitialized) {
@@ -74,11 +76,11 @@ class ConnectionEditDialog : BaseBottomSheetDialogFragment<ConnectionEditDialogB
                 this.user.set(item.user)
                 this.password.set(item.password)
                 this.item.set(item)
-                this.directory.set(item.initialDirectory)
+                this.directory.set(item.initialDirectory ?: "/")
             }
 
             activity.supportFragmentManager.beginTransaction()
-                .add(fragment, "connection-add").commit()
+                .add(fragment, "connection-edit").commit()
         }
     }
 }

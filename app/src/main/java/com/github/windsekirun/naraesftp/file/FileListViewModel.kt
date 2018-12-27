@@ -14,6 +14,7 @@ import androidx.core.content.FileProvider
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.LifecycleOwner
 import com.github.windsekirun.baseapp.base.BaseViewModel
+import com.github.windsekirun.baseapp.module.argsinjector.Extra
 import com.github.windsekirun.baseapp.module.back.DoubleBackInvoker
 import com.github.windsekirun.baseapp.utils.subscribe
 import com.github.windsekirun.bindadapters.observable.ObservableString
@@ -59,7 +60,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
-        loadData()
+        loadData(sessionController.connectionInfo.initialDirectory)
     }
 
     fun onMenuItemClick(item: MenuItem): Boolean {
