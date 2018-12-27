@@ -1,11 +1,11 @@
 package com.github.windsekirun.naraesftp.file
 
 import android.Manifest
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.provider.Settings
 import android.util.Log
 import android.view.MenuItem
 import android.webkit.MimeTypeMap
@@ -17,13 +17,11 @@ import com.github.windsekirun.baseapp.module.back.DoubleBackInvoker
 import com.github.windsekirun.baseapp.utils.subscribe
 import com.github.windsekirun.daggerautoinject.InjectViewModel
 import com.github.windsekirun.naraesftp.MainApplication
+import com.github.windsekirun.naraesftp.R
 import com.github.windsekirun.naraesftp.connection.ConnectionActivity
 import com.github.windsekirun.naraesftp.controller.ConnectionInfoController
 import com.github.windsekirun.naraesftp.controller.SessionController
-import com.github.windsekirun.naraesftp.event.CloseProgressIndicatorDialog
-import com.github.windsekirun.naraesftp.event.OpenConfirmDialog
-import com.github.windsekirun.naraesftp.event.OpenProgressIndicatorDialog
-import com.github.windsekirun.naraesftp.event.OpenProgressIndicatorPercentDialog
+import com.github.windsekirun.naraesftp.event.*
 import com.github.windsekirun.naraesftp.extension.isDirectory
 import com.github.windsekirun.naraesftp.progress.ProgressIndicatorPercentDialog
 import com.jcraft.jsch.ChannelSftp
@@ -31,12 +29,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.impl.F0
+import pyxis.uzuki.live.richutilskt.impl.F1
 import pyxis.uzuki.live.richutilskt.utils.toFile
 import java.io.File
-import com.github.windsekirun.naraesftp.R
 import javax.inject.Inject
 import kotlin.math.roundToInt
-
 
 /**
  * NaraeSFTPClient
@@ -57,8 +54,8 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     @Inject
     lateinit var connectionInfoController: ConnectionInfoController
 
-    override fun onResume(owner: LifecycleOwner) {
-        super.onResume(owner)
+    override fun onCreate(owner: LifecycleOwner) {
+        super.onCreate(owner)
         loadData()
     }
 
@@ -123,6 +120,8 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                 entries.clear()
                 entries.addAll(data)
                 postEvent(CloseProgressIndicatorDialog())
+                postEvent(ScrollUpEvent())
+
             }.addTo(compositeDisposable)
     }
 
@@ -164,30 +163,43 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     private fun openFile(file: File) {
         val event = OpenConfirmDialog(getString(R.string.file_list_open)) {
             val uri = if (Build.VERSION.SDK_INT >= 24) {
-                FileProvider.getUriForFile(
-                    getApplication(),
-                    getApplication<MainApplication>().packageName + ".fileprovider", file
-                )
+                val authority = requireActivity().packageName + ".fileprovider"
+                FileProvider.getUriForFile(requireActivity(), authority, file)
             } else {
                 Uri.fromFile(file)
             }
 
             val myMime = MimeTypeMap.getSingleton()
-            val newIntent = Intent(Intent.ACTION_VIEW)
-            val mimeType = myMime.getMimeTypeFromExtension(file.extension)?.substring(1)
+            val mimeType = myMime.getMimeTypeFromExtension(file.extension)
 
-            newIntent.setDataAndType(uri, mimeType)
-            newIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                setDataAndType(uri, mimeType)
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
 
-            if (newIntent.resolveActivity(getApplication<MainApplication>().packageManager) != null) {
-                startActivity(newIntent)
+            val apkFlag = file.extension.contains("apk")
+
+            if (apkFlag) {
+                val permissions = if (Build.VERSION.SDK_INT >= 23) Manifest.permission.REQUEST_INSTALL_PACKAGES else
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+
+                requestPermission(F1<Int> {
+                    if (Build.VERSION.SDK_INT >= 26 && !requireActivity().packageManager.canRequestPackageInstalls()) {
+                        startActivity(
+                            Intent(
+                                Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
+                                Uri.parse("package:${requireActivity().packageName}")
+                            )
+                        )
+                    } else {
+                        intent.action = Intent.ACTION_VIEW
+                        startActivity(intent)
+                    }
+                }, permissions)
             } else {
-                val intent = Intent(Intent.ACTION_VIEW).apply {
-                    data = Uri.parse(
-                        "https://play.google.com/store/search?q=$mimeType")
-                    setPackage("com.android.vending")
-                }
-                startActivity(intent)
+                val chooser = Intent.createChooser(intent, "Open with...")
+                startActivity(chooser)
             }
         }
 

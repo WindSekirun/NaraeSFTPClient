@@ -1,6 +1,7 @@
 package com.github.windsekirun.naraesftp.file
 
 import android.os.Bundle
+import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.github.windsekirun.baseapp.base.BaseActivity
 import com.github.windsekirun.daggerautoinject.InjectActivity
@@ -64,5 +65,13 @@ class FileListActivity : BaseActivity<FileListActivityBinding>() {
     fun onOpenProgressIndicatorPercentDialog(event: OpenProgressIndicatorPercentDialog) {
         val dialog = ProgressIndicatorPercentDialog.show(this, event.message)
         viewModel.startDownload(dialog, event.item)
+    }
+
+    @Subscribe
+    fun onScrollUpEvent(event: ScrollUpEvent) {
+        mBinding.recyclerView.post {
+            val linearLayoutManager = mBinding.recyclerView.layoutManager as LinearLayoutManager
+            linearLayoutManager.scrollToPosition(0)
+        }
     }
 }

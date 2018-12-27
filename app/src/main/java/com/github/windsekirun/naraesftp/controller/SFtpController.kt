@@ -64,7 +64,6 @@ class SFtpController {
 
                 override fun end() {
                     emitter.onNext(ProgressMonitorItem(size, count, 100.0f))
-                    channelSftp.disconnect()
                     emitter.onComplete()
                 }
 
@@ -123,7 +122,6 @@ class SFtpController {
 
                 override fun end() {
                     emitter.onNext(ProgressMonitorItem(size, count, 100.0f))
-                    channelSftp.disconnect()
                     emitter.onComplete()
                 }
 
@@ -132,7 +130,7 @@ class SFtpController {
                 }
             }
 
-            channelSftp.get(srcPath, out, monitor, ChannelSftp.OVERWRITE)
+            channelSftp.get("$currentPath$srcPath", out, monitor, ChannelSftp.OVERWRITE)
         }
     }
 
