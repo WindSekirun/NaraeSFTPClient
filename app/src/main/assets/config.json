@@ -1,0 +1,9 @@
+{
+  "PrintingLog": true,
+  "ServerUrl": "https://blog.uzuki.live",
+  "Timeout": 20000,
+  "ConnectTimeout": 10000,
+  "ProvideDetailLog": false,
+  "RequirePortrait": true,
+  "DisableRxAdapter": false
+}

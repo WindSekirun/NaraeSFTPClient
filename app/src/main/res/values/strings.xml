@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">NaraeSFTP</string>
+    <string name="add_connection">연결 추가</string>
+</resources>

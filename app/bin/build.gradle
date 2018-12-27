@@ -1,0 +1,144 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'io.objectbox'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.github.windsekirun.baseappset"
+        minSdkVersion 19
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def apkName = project.name
+
+            if (!variant.getFlavorName().isEmpty()) apkName += "-" + variant.getFlavorName()
+            if (variant.buildType.name == "release") apkName += "-" + variant.buildType.name
+
+            apkName += "-" + new Date().format('yyyyMMdd-HHmm')
+            apkName += ".apk"
+            output.outputFileName = apkName
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/library_release.kotlin_module'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+
+    // kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    // AndroidX
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.multidex:multidex:2.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation "androidx.exifinterface:exifinterface:1.0.0"
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    kapt "androidx.lifecycle:lifecycle-compiler:2.0.0"
+
+    // base
+    implementation("com.github.windsekirun:PyxisBaseApp:1.0.3-androidx-temp1") {
+        exclude group: 'androidx.databinding'
+    }
+
+    // Maintained by WindSekirun
+    implementation 'com.github.WindSekirun:NyanCat:1.2.0'
+    implementation 'com.github.WindSekirun:MockupModule:1.0.6'
+    implementation 'com.github.WindSekirun:RichUtilsKt:2.3.1'
+    implementation 'com.github.WindSekirun:RxSocialLogin:1.1.0'
+    implementation 'com.github.WindSekirun:RollingBanner:1.0.5'
+    implementation ('com.github.WindSekirun:BindAdapters:0.1.5-androidx') {
+        exclude group: 'androidx.databinding'
+    }
+    implementation 'com.github.windsekirun:dagger-auto-inject:1.5.0'
+    kapt 'com.github.windsekirun:dagger-auto-inject-compiler:1.5.0'
+    implementation 'com.github.windsekirun:attribute-parser:1.0.2'
+    kapt 'com.github.windsekirun:attribute-parser-compiler:1.0.2'
+
+    // Glide
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+    kapt 'com.github.bumptech.glide:compiler:4.7.1'
+    implementation 'jp.wasabeef:glide-transformations:3.0.1'
+
+    // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+    api('com.github.ihsanbal:LoggingInterceptor:2.0.4') {
+        exclude group: 'org.json', module: 'json'
+    }
+
+    // Guava
+    implementation 'com.google.guava:guava:22.0-android'
+
+    // Dagger2
+    implementation 'com.google.dagger:dagger:2.16'
+    kapt 'com.google.dagger:dagger-compiler:2.16'
+    compileOnly 'org.glassfish:javax.annotation:10.0-b28'
+    compileOnly 'javax.annotation:jsr250-api:1.0'
+    implementation 'javax.inject:javax.inject:1'
+    implementation 'com.google.dagger:dagger-android-support:2.16'
+    kapt 'com.google.dagger:dagger-android-processor:2.16'
+
+    // RxJava
+    implementation 'pl.charmas.android:android-reactive-location2:2.1@aar'
+    implementation 'com.benoitquenaudon:rxdatabinding:2.0.0'
+    implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.2'
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.4.0"
+
+    // LSA
+    implementation 'com.annimon:stream:1.2.1'
+
+    // FCM & Google play services
+    implementation 'com.google.firebase:firebase-messaging:17.0.0'
+    implementation 'com.google.firebase:firebase-iid:16.0.0'
+    implementation 'com.google.android.gms:play-services-basement:15.0.1'
+    implementation 'com.google.android.gms:play-services-location:15.0.1'
+    implementation 'com.google.android.gms:play-services-places:15.0.1'
+
+    // Eventbus
+    implementation 'org.greenrobot:eventbus:3.1.1'
+
+    // objectbox
+    implementation "io.objectbox:objectbox-kotlin:$objectboxVersion"
+}
+
