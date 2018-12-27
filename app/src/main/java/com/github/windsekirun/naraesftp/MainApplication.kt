@@ -3,12 +3,12 @@ package com.github.windsekirun.naraesftp
 import android.app.Activity
 import android.app.Service
 import android.content.Context
-import com.github.windsekirun.naraesftp.di.DaggerAppComponent
 import com.github.windsekirun.baseapp.BaseApplication
 import com.github.windsekirun.daggerautoinject.DaggerAutoInject
-
 import com.github.windsekirun.daggerautoinject.InjectApplication
+import com.github.windsekirun.naraesftp.data.MyObjectBox
 import com.github.windsekirun.naraesftp.di.AppComponent
+import com.github.windsekirun.naraesftp.di.DaggerAppComponent
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
@@ -16,7 +16,6 @@ import dagger.android.HasServiceInjector
 import io.objectbox.Box
 import io.objectbox.BoxStore
 import pyxis.uzuki.live.attribute.parser.annotation.AttributeParser
-
 import javax.inject.Inject
 
 /**
@@ -34,7 +33,7 @@ class MainApplication : BaseApplication(), HasActivityInjector, HasServiceInject
     lateinit var mActivityDispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
     @Inject
     lateinit var mServiceDispatchingAndroidInjector: DispatchingAndroidInjector<Service>
-    private val mBoxStore: BoxStore? = null
+    private var mBoxStore: BoxStore? = null
 
     override val configFilePath: String
         get() = "config.json"
@@ -48,7 +47,7 @@ class MainApplication : BaseApplication(), HasActivityInjector, HasServiceInject
 
         DaggerAutoInject.init(this, appComponent)
 
-        //        mBoxStore = MyObjectBox.builder().androidContext(this).build();
+        mBoxStore = MyObjectBox.builder().androidContext(this).build()
     }
 
     fun <T> getBox(cls: Class<T>): Box<T> {

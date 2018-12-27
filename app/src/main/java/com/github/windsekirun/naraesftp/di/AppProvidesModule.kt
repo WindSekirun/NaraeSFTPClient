@@ -12,7 +12,6 @@ class AppProvidesModule {
 
     @Provides
     @Singleton
-    fun provideRPerference(application: MainApplication): RPreference {
-        return RPreference.getInstance(application)
-    }
+    fun provideRPerference(application: MainApplication): RPreference = RPreference.getInstance(application)
+
 }

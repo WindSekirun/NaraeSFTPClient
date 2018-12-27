@@ -1,4 +1,4 @@
-package com.github.windsekirun.naraesftp.ftp
+package com.github.windsekirun.naraesftp.controller
 
 import android.text.TextUtils
 import com.github.windsekirun.naraesftp.data.ProgressMonitorItem
@@ -17,7 +17,7 @@ import java.util.*
  *
  * Description:
  */
-object SFtpController {
+class SFtpController {
 
     /**
      * Remote directory path
@@ -143,5 +143,7 @@ object SFtpController {
                 this as ChannelSftp
             }
 
-    const val TAG = "SFtpController"
+    companion object {
+        private const val TAG = "SFtpController"
+    }
 }

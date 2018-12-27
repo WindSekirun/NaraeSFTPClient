@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.github.windsekirun.naraesftp.connection.ConnectionViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,10 +21,12 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
             app:layout_constraintTop_toTopOf="parent"
-            app:title="NaraeSFTPClient" />
+            app:actionSelected="@{viewModel::onMenuItemClick}"
+            app:title="@string/app_name" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
+            app:items="@{viewModel.connectionItems}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
