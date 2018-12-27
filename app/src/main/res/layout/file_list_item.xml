@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable
-            name="item"
-            type="com.github.windsekirun.naraesftp.data.ConnectionInfoItem"/>
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,44 +12,64 @@
         android:layout_height="70dp"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/imgIcon"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_marginStart="16dp"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:text="@{item.title}"
-            app:layout_constraintBottom_toTopOf="@+id/textView2"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_android" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/textView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imgIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            android:ellipsize="end"
             app:layout_constraintVertical_chainStyle="packed"
-            tools:text="UzukiLive" />
+            tools:text="MainApplication.kt" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:textColor="@color/brownish_grey"
             android:textSize="15sp"
-            android:text="@{item.hostPort}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imgIcon"
             app:layout_constraintTop_toBottomOf="@+id/textView"
-            tools:text="uzuki.live:22" />
+            tools:text="4.8MB" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:textColor="@color/warm_grey"
+            android:id="@+id/textView3"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/brownish_grey"
             android:textSize="14sp"
-            android:text="@{item.lastConnectionDate}"
-            app:layout_constraintBottom_toBottomOf="@+id/textView2"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView2"
             app:layout_constraintTop_toTopOf="@+id/textView2"
-            tools:text="2018-12-27" />
+            tools:text="2018.12.27" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/brownish_grey"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@+id/textView3"
+            app:layout_constraintTop_toTopOf="@+id/textView2"
+            tools:text="-rw-r--r--" />
 
         <View
             android:layout_width="match_parent"

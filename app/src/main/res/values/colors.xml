@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#9c64a6</color>
     <color name="colorAccent">#575f64</color>
 
-    <color name="windowBackground">#f3f3f3</color>
+    <color name="windowBackground">@color/white</color>
 
     <color name="black">#000000</color>
     <color name="pinkish_grey">#bbbbbb</color>
@@ -14,4 +14,5 @@
     <color name="dark_sky_blue">#47abe4</color>
     <color name="greyish_brown">#424242</color>
     <color name="red">#ea0b00</color>
+    <color name="white_f8">#f8f8f8</color>
 </resources>

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">NaraeSFTP</string>
     <string name="add_connection">연결 추가</string>
+    <string name="intro_desc">Simple, basic FTP client for Android</string>
 </resources>
