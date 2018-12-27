@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="dialog"
+            type="com.github.windsekirun.naraesftp.controller.ConnectionAddDialog"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="새로운 연결을 추가해보세요."
+            android:text="@string/connection_add_title"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -33,7 +35,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:hint="연결 제목"
+            android:hint="@string/connection_add_item_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4">
@@ -41,6 +43,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@={dialog.title}"
                 android:singleLine="true"
                 android:textColor="@color/black" />
 
@@ -54,7 +57,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:hint="호스트 주소"
+            android:hint="@string/connection_add_item_host"
             app:layout_constraintEnd_toStartOf="@+id/textInputLayout5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
@@ -62,6 +65,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@={dialog.host}"
                 android:singleLine="true"
                 android:textColor="@color/black" />
 
@@ -74,7 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:hint="포트"
+            android:hint="@string/connection_add_item_port"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
 
@@ -82,6 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
+                android:text="@={dialog.port}"
                 android:singleLine="true"
                 android:textColor="@color/black" />
 
@@ -96,7 +101,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:hint="아이디"
+            android:hint="@string/connection_add_item_user"
             app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
@@ -104,6 +109,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:singleLine="true"
+                android:text="@={dialog.user}"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black" />
 
@@ -117,7 +123,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:hint="비밀번호"
+            android:hint="@string/connection_add_item_password"
             app:layout_constraintStart_toEndOf="@+id/guideline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
@@ -127,6 +133,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:singleLine="true"
+                android:text="@={dialog.password}"
                 android:textColor="@color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -138,6 +145,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
+            android:onClick="@{dialog::clickConfirm}"
             android:background="@drawable/circle_btn"
             android:src="@drawable/ic_check_white_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -148,6 +156,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginTop="16dp"
+            android:onClick="@{dialog::clickClose}"
             android:layout_marginEnd="16dp"
             android:background="@drawable/circle_btn"
             android:src="@drawable/ic_close_white_24dp"

@@ -5,7 +5,15 @@ import android.os.Bundle
 import com.github.windsekirun.baseapp.base.BaseActivity
 import com.github.windsekirun.daggerautoinject.InjectActivity
 import com.github.windsekirun.naraesftp.R
+import com.github.windsekirun.naraesftp.controller.ConnectionAddDialog
 import com.github.windsekirun.naraesftp.databinding.ConnectionActivityBinding
+import com.github.windsekirun.naraesftp.event.ClickConnectionItemEvent
+import com.github.windsekirun.naraesftp.event.OpenConfirmDialog
+import com.github.windsekirun.naraesftp.event.OpenConnectionAddDialog
+import com.github.windsekirun.naraesftp.event.OpenProgressIndicatorDialog
+import com.github.windsekirun.naraesftp.progress.ConfirmDialog
+import com.github.windsekirun.naraesftp.progress.ProgressIndicatorDialog
+import org.greenrobot.eventbus.Subscribe
 
 /**
  * NaraeSFTPClient
@@ -18,15 +26,35 @@ import com.github.windsekirun.naraesftp.databinding.ConnectionActivityBinding
 
 @InjectActivity
 class ConnectionActivity : BaseActivity<ConnectionActivityBinding>() {
-    lateinit var mViewModel: ConnectionViewModel
+    lateinit var viewModel: ConnectionViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.connection_activity)
-        mViewModel = getViewModel(ConnectionViewModel::class.java)
-        mBinding.viewModel = mViewModel
+        viewModel = getViewModel(ConnectionViewModel::class.java)
+        mBinding.viewModel = viewModel
 
         mBinding.toolbar.inflateMenu(R.menu.menu_connection)
-//        initRecyclerView(mBinding.recyclerView, )
+        initRecyclerView(mBinding.recyclerView, ConnectionItemAdapter::class.java)
+    }
+
+    @Subscribe
+    fun onOpenConnectionAddDialog(event: OpenConnectionAddDialog) {
+        ConnectionAddDialog.show(this, event.callback)
+    }
+
+    @Subscribe
+    fun onClickConnectionItemEvent(event: ClickConnectionItemEvent) {
+        viewModel.tryConnection(event.item)
+    }
+
+    @Subscribe
+    fun onProgressIndicatorDialog(event: OpenProgressIndicatorDialog) {
+        ProgressIndicatorDialog.show(this, event.message)
+    }
+
+    @Subscribe
+    fun onOpenConfirmDialog(event: OpenConfirmDialog) {
+        ConfirmDialog.show(this, event.message, event.callback)
     }
 }

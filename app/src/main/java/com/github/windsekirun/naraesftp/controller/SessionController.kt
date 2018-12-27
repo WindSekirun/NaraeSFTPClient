@@ -8,6 +8,8 @@ import com.jcraft.jsch.JSch
 import com.jcraft.jsch.Session
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
+import pyxis.uzuki.live.richutilskt.impl.F1
+import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import java.io.File
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -23,13 +25,7 @@ class SessionController(val sFtpController: SFtpController) {
     lateinit var session: Session
     lateinit var connectionInfo: ConnectionInfoItem
     lateinit var sshDisposable: Disposable
-
-    /**
-     * set [ConnectionInfoItem]
-     */
-    fun setConenctionInfo(connectionInfoItem: ConnectionInfoItem) {
-        this.connectionInfo = connectionInfoItem
-    }
+    var callback: F1<Boolean>? = null
 
     /**
      * Connect to [Session]
@@ -47,6 +43,7 @@ class SessionController(val sFtpController: SFtpController) {
      */
     fun disconnect() {
         sshDisposable.dispose()
+        callback?.invoke(false)
     }
 
     /**
@@ -89,8 +86,9 @@ class SessionController(val sFtpController: SFtpController) {
             it.onNext(true)
         }.flatMap { Observable.interval(2, TimeUnit.SECONDS) }
             .flatMap { Observable.just(session.isConnected) }
-            .subscribe { _, throwable ->
+            .subscribe { data, throwable ->
                 Log.e(TAG, "message: ${throwable?.message}", throwable)
+                runOnUiThread { callback?.invoke(data) }
             }
     }
 

@@ -6,6 +6,9 @@ import com.github.windsekirun.baseapp.base.BaseActivity
 import com.github.windsekirun.daggerautoinject.InjectActivity
 import com.github.windsekirun.naraesftp.R
 import com.github.windsekirun.naraesftp.databinding.IntroActivityBinding
+import com.github.windsekirun.naraesftp.event.OpenProgressIndicatorDialog
+import com.github.windsekirun.naraesftp.progress.ProgressIndicatorDialog
+import org.greenrobot.eventbus.Subscribe
 
 /**
  * NaraeSFTPClient
@@ -25,5 +28,10 @@ class IntroActivity : BaseActivity<IntroActivityBinding>() {
         setContentView(R.layout.intro_activity)
         mViewModel = getViewModel(IntroViewModel::class.java)
         mBinding.viewModel = mViewModel
+    }
+
+    @Subscribe
+    fun onProgressIndicatorDialog(event: OpenProgressIndicatorDialog) {
+        ProgressIndicatorDialog.show(this, event.message)
     }
 }

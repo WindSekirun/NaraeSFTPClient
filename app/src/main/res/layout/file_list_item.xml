@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="item"
+            type="com.jcraft.jsch.ChannelSftp.LsEntry" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,13 +31,14 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:text="@{item.filename}"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/textView2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/imgIcon"
             app:layout_constraintTop_toTopOf="parent"
-            android:ellipsize="end"
             app:layout_constraintVertical_chainStyle="packed"
             tools:text="MainApplication.kt" />
 
@@ -51,9 +55,9 @@
             tools:text="4.8MB" />
 
         <TextView
+            android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView3"
             android:layout_marginStart="8dp"
             android:textColor="@color/brownish_grey"
             android:textSize="14sp"

@@ -2,4 +2,15 @@
     <string name="app_name">NaraeSFTP</string>
     <string name="add_connection">연결 추가</string>
     <string name="intro_desc">Simple, basic FTP client for Android</string>
+    <string name="connection_add_title">새로운 연결을 추가해보세요.</string>
+    <string name="connection_add_item_title">연결 제목</string>
+    <string name="connection_add_item_host">호스트 주소</string>
+    <string name="connection_add_item_port">포트</string>
+    <string name="connection_add_item_user">아이디</string>
+    <string name="connection_add_item_password">비밀번호</string>
+    <string name="connection_connecting">연결중입니다.\n잠시만 기다려주세요.</string>
+    <string name="connection_fail_retry">연결에 실패하였습니다.\n다시 시도할까요?</string>
+    <string name="connection_success_autoconnect">연결에 성공하였습니다!\n다음에도 이 정보로 연결할까요?</string>
+    <string name="file_list_disconnected">연결이 끊어졌습니다. 연결 화면으로 이동합니다.</string>
+    <string name="file_list_loading">파일 목록을 가져오고 있습니다.</string>
 </resources>

@@ -6,6 +6,9 @@ import com.github.windsekirun.baseapp.base.BaseActivity
 import com.github.windsekirun.daggerautoinject.InjectActivity
 import com.github.windsekirun.naraesftp.R
 import com.github.windsekirun.naraesftp.databinding.FileListActivityBinding
+import com.github.windsekirun.naraesftp.event.OpenProgressIndicatorDialog
+import com.github.windsekirun.naraesftp.progress.ProgressIndicatorDialog
+import org.greenrobot.eventbus.Subscribe
 
 /**
  * NaraeSFTPClient
@@ -24,6 +27,13 @@ class FileListActivity : BaseActivity<FileListActivityBinding>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.file_list_activity)
         mViewModel = getViewModel(FileListViewModel::class.java)
-        mBinding.setViewModel(mViewModel)
+        mBinding.viewModel = mViewModel
+
+        initRecyclerView(mBinding.recyclerView, FileListItemAdapter::class.java)
+    }
+
+    @Subscribe
+    fun onProgressIndicatorDialog(event: OpenProgressIndicatorDialog) {
+        ProgressIndicatorDialog.show(this, event.message)
     }
 }

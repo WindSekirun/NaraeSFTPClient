@@ -67,14 +67,35 @@ class ConnectionInfoController(val application: MainApplication) {
      * set Last, autoConnect information for [ConnectionInfoItem]
      */
     fun setLastConnectionInfo(id: Long, autoConnect: Boolean): Single<ConnectionInfoItem> {
+        return setAutoConnectionFlag(id, autoConnect)
+            .flatMap {
+                val item = box.get(id).apply {
+                    this.lastConnectionTime = Date()
+                }
+
+                box.put(item)
+                Single.just(item)
+            }
+    }
+
+    /**
+     * set autoConnect information for [ConnectionInfoItem]
+     */
+    fun setAutoConnectionFlag(id: Long, autoConnect: Boolean): Single<Long> {
         return Single.create { emitter ->
+            val list = box.all.map {
+                it.autoConnect = false
+                it
+            }
+
+            box.put(list)
+
             val item = box.get(id).apply {
                 this.autoConnect = autoConnect
-                this.lastConnectionTime = Date()
             }
 
             box.put(item)
-            emitter.onSuccess(item)
+            emitter.onSuccess(item.id)
         }
     }
 }

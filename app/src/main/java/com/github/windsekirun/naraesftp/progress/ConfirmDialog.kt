@@ -16,6 +16,7 @@ class ConfirmDialog : BaseBottomSheetDialogFragment<ConfirmDialogBinding>() {
 
     val message = ObservableString()
     lateinit var callback: () -> Unit
+    lateinit var closeCallback: () -> Unit
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
         BottomSheetDialog(requireContext(), R.style.BottomSheetDialogThemeLight)
@@ -29,6 +30,9 @@ class ConfirmDialog : BaseBottomSheetDialogFragment<ConfirmDialogBinding>() {
     }
 
     fun clickClose(view: View) {
+        if (::closeCallback.isInitialized) {
+            closeCallback.invoke()
+        }
         dismiss()
     }
 
