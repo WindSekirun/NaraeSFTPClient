@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.Settings
+import android.text.TextUtils
 import android.util.Log
 import android.view.MenuItem
 import android.webkit.MimeTypeMap
@@ -15,6 +16,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.github.windsekirun.baseapp.base.BaseViewModel
 import com.github.windsekirun.baseapp.module.back.DoubleBackInvoker
 import com.github.windsekirun.baseapp.utils.subscribe
+import com.github.windsekirun.bindadapters.observable.ObservableString
 import com.github.windsekirun.daggerautoinject.InjectViewModel
 import com.github.windsekirun.naraesftp.MainApplication
 import com.github.windsekirun.naraesftp.R
@@ -48,6 +50,7 @@ import kotlin.math.roundToInt
 class FileListViewModel @Inject
 constructor(application: MainApplication) : BaseViewModel(application) {
     val entries = ObservableArrayList<ChannelSftp.LsEntry>()
+    val path = ObservableString()
 
     @Inject
     lateinit var sessionController: SessionController
@@ -67,7 +70,19 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     fun onBackPressed() {
-        DoubleBackInvoker.execute(getString(R.string.file_list_double_back))
+        val currentPath = sessionController.sFtpController.currentPath
+        if (currentPath != "/") {
+            val list = currentPath.split("/").toMutableList()
+            if (list.last() == "") list.removeAt(list.lastIndex)
+            list.removeAt(list.lastIndex)
+
+            var newPath = TextUtils.join("/", list)
+            if (newPath == "") newPath += "/"
+            if (newPath.last() != '/') newPath += "/"
+            loadData(newPath, true)
+        } else {
+            DoubleBackInvoker.execute(getString(R.string.file_list_double_back))
+        }
     }
 
     fun clickEntry(item: ChannelSftp.LsEntry) {
@@ -101,7 +116,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
             .addTo(compositeDisposable)
     }
 
-    private fun loadData(path: String = "") {
+    private fun loadData(path: String = "", backward: Boolean = false) {
         if (!sessionController.isConnected()) {
             showToast(getString(R.string.file_list_disconnected))
             tryDisconnect()
@@ -111,17 +126,21 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         val event = OpenProgressIndicatorDialog(getString(R.string.file_list_loading))
         postEvent(event)
 
-        sessionController.getListRemoteFiles(path)
+        sessionController.getListRemoteFiles(path, backward)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data, error ->
-                if (error != null || data == null) return@subscribe
+                if (error != null || data == null) {
+                    postEvent(CloseProgressIndicatorDialog())
+                    postEvent(ScrollUpEvent())
+                    return@subscribe
+                }
 
                 entries.clear()
                 entries.addAll(data)
+                this.path.set(sessionController.sFtpController.currentPath)
                 postEvent(CloseProgressIndicatorDialog())
                 postEvent(ScrollUpEvent())
-
             }.addTo(compositeDisposable)
     }
 

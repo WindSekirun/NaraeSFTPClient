@@ -81,8 +81,8 @@ class SFtpController {
      *
      * @throws IOException when channelSftp.ls is null.
      */
-    fun getListRemoteFiles(session: Session, path: String?): Observable<List<ChannelSftp.LsEntry>> {
-        currentPath = if (TextUtils.isEmpty(path)) currentPath else "$currentPath$path/"
+    fun getListRemoteFiles(session: Session, path: String, backward: Boolean = false): Observable<List<ChannelSftp.LsEntry>> {
+        currentPath = if (TextUtils.isEmpty(path)) currentPath else if (backward) path else "$currentPath$path/"
         return Observable.create { emitter ->
             val channelSftp = session.openSftpChannel()
             val files: Vector<Any>? = channelSftp.ls(currentPath)
@@ -92,7 +92,12 @@ class SFtpController {
                 emitter.onError(IOException("Cannot fetch items"))
             } else {
                 // safe cast instead unchecked cast because type parameter of [files] is Any
-                val list = files.filterIsInstance(ChannelSftp.LsEntry::class.java).sortedBy { it.filename }
+                val list = files
+                    .filterIsInstance(ChannelSftp.LsEntry::class.java)
+                    .filter { it.filename != ".." && it.filename != "." }
+                    .sortedBy { it.filename }
+                    .toList()
+
                 emitter.onNext(list)
             }
         }
@@ -135,11 +140,11 @@ class SFtpController {
     }
 
     private fun Session.openSftpChannel(nonInput: Boolean = true): ChannelSftp =
-            with(this.openChannel("sftp")) {
-                if (nonInput) this.inputStream = null
-                this.connect()
-                this as ChannelSftp
-            }
+        with(this.openChannel("sftp")) {
+            if (nonInput) this.inputStream = null
+            this.connect()
+            this as ChannelSftp
+        }
 
     companion object {
         private const val TAG = "SFtpController"
