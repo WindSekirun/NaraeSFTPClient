@@ -59,6 +59,11 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
         loadData(sessionController.connectionInfo.initialDirectory)
+
+        path.propertyChanges()
+            .filter { path.get() == "//"}
+            .subscribe { _, _ -> path.set("/") }
+            .addTo(compositeDisposable)
     }
 
     fun onMenuItemClick(item: MenuItem): Boolean {

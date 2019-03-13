@@ -21,7 +21,8 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
             app:layout_constraintTop_toTopOf="parent"
-            app:title="@string/app_name" />
+            app:title="@string/app_name"
+            app:titleTextColor="@color/white" />
 
         <TextView
             android:id="@+id/txtPath"
@@ -54,14 +55,14 @@
             style="@style/Widget.MaterialComponents.FloatingActionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="@{viewModel::clickAddConnection}"
             android:layout_gravity="bottom|right"
             android:layout_margin="16dp"
+            android:onClick="@{viewModel::clickAddConnection}"
             app:backgroundTint="@color/colorPrimary"
-            app:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/ic_plus_black_36dp" />
+            app:srcCompat="@drawable/ic_plus_black_36dp"
+            app:tint="@color/white" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
