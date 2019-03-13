@@ -27,7 +27,7 @@ fun getReadablePermision(item: ChannelSftp.LsEntry): String {
 }
 
 fun getReadableDate(item: ChannelSftp.LsEntry): String {
-    return (item.attrs.mTime.toLong() * 1000).asDateString("yyyy-MM-dd")
+    return (item.attrs.mTime.toLong() * 1000).asDateString("yyyy-MM-dd HH:mm:ss")
 }
 
 fun getIcon(item: ChannelSftp.LsEntry): Drawable? {
@@ -51,74 +51,76 @@ object FileIconMatcher {
 
     fun find(item: ChannelSftp.LsEntry): Int = find(item.filename.getFileExtension())
 
-    private fun find(extension: String): Int {
-        if (cacheMap.containsKey(extension)) return cacheMap[extension] ?: R.drawable.ic_document
+    private fun find(ext: String): Int {
+        if (cacheMap.containsKey(ext)) return cacheMap[ext] ?: R.drawable.ic_document
 
         val resources = when {
-            extension.containsList("apk")
-            -> R.drawable.ic_android
-            extension.containsList("mp3", "m4a", "flac", "wma", "aiff")
-            -> R.drawable.ic_audio
-            extension.containsList("c", "m")
-            -> R.drawable.ic_c
-            extension.containsList("sh", "ksh", "csh", "tcsh", "zsh", "bash", "bat", "cmd", "awk", "fish")
-            -> R.drawable.ic_console
-            extension.containsList("cc", "cpp", "mm", "cxx")
-            -> R.drawable.ic_cpp
-            extension.containsList("css")
-            -> R.drawable.ic_css
-            extension.containsList("ics", "eml", "mail")
-            -> R.drawable.ic_email
-            extension.containsList("gradle")
-            -> R.drawable.ic_gradle
-            extension.containsList("groovy")
-            -> R.drawable.ic_groovy
-            extension.containsList("html", "htm")
-            -> R.drawable.ic_html
-            extension.containsList("png", "jpg", "jpeg", "gif", "svg", "ico", "tif", "tiff", "psd", "bmp", "webp")
-            -> R.drawable.ic_image
-            extension.containsList("java", "jar", "jsp")
-            -> R.drawable.ic_java
-            extension.containsList("js", "esx", "mjs")
-            -> R.drawable.ic_javascript
-            extension.containsList("json")
-            -> R.drawable.ic_json
-            extension.containsList("kt", "kts")
-            -> R.drawable.ic_kotlin
-            extension.containsList("less")
-            -> R.drawable.ic_less
-            extension.containsList("log")
-            -> R.drawable.ic_log
-            extension.containsList("md", "markdown", "rst")
-            -> R.drawable.ic_markdown
-            extension.containsList("pdf")
-            -> R.drawable.ic_pdf
-            extension.containsList("php")
-            -> R.drawable.ic_php
-            extension.containsList("pptx", "ppt")
-            -> R.drawable.ic_powerpoint
-            extension.containsList("py")
-            -> R.drawable.ic_python
-            extension.containsList("swit")
-            -> R.drawable.ic_swift
-            extension.containsList("ts")
-            -> R.drawable.ic_typescript
-            extension.containsList("webm", "mkv", "avi", "mov", "wmv", "mp4", "m4v", "mpeg")
-            -> R.drawable.ic_video
-            extension.containsList("doc", "docx", "rtf")
-            -> R.drawable.ic_word
-            extension.containsList("xml", "plist", "xsl", "iml", "project")
-            -> R.drawable.ic_xml
-            extension.containsList("yaml", "YAML-tmLanguage", "yml")
-            -> R.drawable.ic_yaml
-            extension.containsList("zip", "tar", "gz", "xz", "bzip2", "gzip", "7z", "rar", "tgz")
-            -> R.drawable.ic_zip
+            ext.contains(EXT_ANDROID) -> R.drawable.ic_android
+            ext.contains(EXT_AUDIO) -> R.drawable.ic_audio
+            ext.contains(EXT_C) -> R.drawable.ic_c
+            ext.contains(EXT_CONSOLE) -> R.drawable.ic_console
+            ext.contains(EXT_CPP) -> R.drawable.ic_cpp
+            ext.contains(EXT_CSS) -> R.drawable.ic_css
+            ext.contains(EXT_EMAIL) -> R.drawable.ic_email
+            ext.contains(EXT_GRADLE) -> R.drawable.ic_gradle
+            ext.contains(EXT_GROOVY) -> R.drawable.ic_groovy
+            ext.contains(EXT_HTML) -> R.drawable.ic_html
+            ext.contains(EXT_IMAGE) -> R.drawable.ic_image
+            ext.contains(EXT_JAVA) -> R.drawable.ic_java
+            ext.contains(EXT_JS) -> R.drawable.ic_javascript
+            ext.contains(EXT_JSON) -> R.drawable.ic_json
+            ext.contains(EXT_KOTLIN) -> R.drawable.ic_kotlin
+            ext.contains(EXT_LESS) -> R.drawable.ic_less
+            ext.contains(EXT_LOG) -> R.drawable.ic_log
+            ext.contains(EXT_MARKDOWN) -> R.drawable.ic_markdown
+            ext.contains(EXT_PDF) -> R.drawable.ic_pdf
+            ext.contains(EXT_PHP) -> R.drawable.ic_php
+            ext.contains(EXT_PPT) -> R.drawable.ic_powerpoint
+            ext.contains(EXT_PYTHON) -> R.drawable.ic_python
+            ext.contains(EXT_SWIFT) -> R.drawable.ic_swift
+            ext.contains(EXT_TS) -> R.drawable.ic_typescript
+            ext.contains(EXT_VIDEO) -> R.drawable.ic_video
+            ext.contains(EXT_WORD) -> R.drawable.ic_word
+            ext.contains(EXT_XML) -> R.drawable.ic_xml
+            ext.contains(EXT_YAML) -> R.drawable.ic_yaml
+            ext.contains(EXT_ZIP) -> R.drawable.ic_zip
             else -> R.drawable.ic_document
         }
 
-        cacheMap[extension] = resources
+        cacheMap[ext] = resources
         return resources
     }
+
+    private val EXT_ANDROID = arrayOf("apk")
+    private val EXT_AUDIO = arrayOf("mp3", "m4a", "flac", "wma", "aiff")
+    private val EXT_C = arrayOf("c", "m")
+    private val EXT_CONSOLE = arrayOf("sh", "zsh", "bash", "bat", "cmd", "awk", "fish")
+    private val EXT_CPP = arrayOf("cc", "cpp", "mm", "cxx")
+    private val EXT_CSS = arrayOf("css")
+    private val EXT_EMAIL = arrayOf("ics", "eml", "mail")
+    private val EXT_GRADLE = arrayOf("gradle")
+    private val EXT_GROOVY = arrayOf("groovy")
+    private val EXT_HTML = arrayOf("html", "htm")
+    private val EXT_IMAGE =
+        arrayOf("png", "jpg", "jpeg", "gif", "svg", "ico", "tif", "psd", "bmp", "webp")
+    private val EXT_JAVA = arrayOf("java", "jar", "jsp")
+    private val EXT_JS = arrayOf("js", "esc", "mjs")
+    private val EXT_JSON = arrayOf("json")
+    private val EXT_KOTLIN = arrayOf("kt", "kts")
+    private val EXT_LESS = arrayOf("less")
+    private val EXT_LOG = arrayOf("log")
+    private val EXT_MARKDOWN = arrayOf("md", "markdown", "rst")
+    private val EXT_PDF = arrayOf("pdf")
+    private val EXT_PHP = arrayOf("php")
+    private val EXT_PPT = arrayOf("pptx", "ppt")
+    private val EXT_PYTHON = arrayOf("py")
+    private val EXT_SWIFT = arrayOf("swift")
+    private val EXT_TS = arrayOf("ts")
+    private val EXT_VIDEO = arrayOf("webm", "mkv", "avi", "mov", "wmv", "mp4", "m4v", "mpeg")
+    private val EXT_WORD = arrayOf("doc", "docx", "rtf")
+    private val EXT_XML = arrayOf("xml", "plist", "xsl", "iml", "project")
+    private val EXT_YAML = arrayOf("yaml", "YAML-tmLanguage", "yml")
+    private val EXT_ZIP = arrayOf("zip", "tar", "gz", "xz", "bzip2", "gzip", "7z", "rar", "tgz")
 }
 
-private fun String.containsList(vararg target: String) = target.contains(this)
+private fun String.contains(target: Array<String>) = target.contains(this)
