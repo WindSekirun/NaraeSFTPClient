@@ -4,15 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
-            type="com.github.windsekirun.naraesftp.file.FileListViewModel"/>
+            type="com.github.windsekirun.naraesftp.file.FileListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -21,21 +22,22 @@
             android:background="@color/colorPrimary"
             app:actionSelected="@{viewModel::onMenuItemClick}"
             app:layout_constraintTop_toTopOf="parent"
-            app:title="@string/app_name" />
+            app:title="@string/app_name"
+            app:titleTextColor="@color/white" />
 
         <TextView
+            android:id="@+id/txtPath"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@color/white_f8"
-            android:text="@{viewModel.path}"
             android:drawableStart="@drawable/ic_folder_other"
             android:drawablePadding="5dp"
             android:gravity="center_vertical"
             android:paddingLeft="16dp"
-            android:id="@+id/txtPath"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar"
             android:paddingRight="16dp"
+            android:text="@{viewModel.path}"
             android:textSize="15sp"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
             tools:text="/home/pyxis/" />
 
         <androidx.recyclerview.widget.RecyclerView

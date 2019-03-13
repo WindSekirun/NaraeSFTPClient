@@ -30,8 +30,8 @@ class ConnectionEditDialog : BaseBottomSheetDialogFragment<ConnectionEditDialogB
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
         BottomSheetDialog(requireContext(), R.style.BottomSheetDialogThemeLight)
 
-    override fun createView(layoutInflater: LayoutInflater, viewGroup: ViewGroup?) =
-        ConnectionEditDialogBinding.inflate(layoutInflater, viewGroup, false)
+    override fun createView(inflater: LayoutInflater, container: ViewGroup?) =
+        ConnectionEditDialogBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -19,8 +19,8 @@ class ProgressIndicatorDialog : BaseBottomSheetDialogFragment<ProgressIndicatorD
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
         BottomSheetDialog(requireContext(), R.style.BottomSheetDialogThemeLight)
 
-    override fun createView(layoutInflater: LayoutInflater, viewGroup: ViewGroup?) =
-        ProgressIndicatorDialogBinding.inflate(layoutInflater, viewGroup, false)
+    override fun createView(inflater: LayoutInflater, container: ViewGroup?) =
+        ProgressIndicatorDialogBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

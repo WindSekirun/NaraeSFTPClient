@@ -2,6 +2,7 @@ package com.github.windsekirun.naraesftp.connection
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.LifecycleOwner
 import com.github.windsekirun.baseapp.base.BaseViewModel
@@ -41,15 +42,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
-
         loadData()
-    }
-
-    fun onMenuItemClick(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_connection_plus -> addNewConnection()
-        }
-        return true
     }
 
     fun tryConnection(item: ConnectionInfoItem) {
@@ -57,7 +50,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         postEvent(event)
 
         sessionController.connectionInfo = item
-        sessionController.callback = F1 { it ->
+        sessionController.callback = F1 {
             postEvent(CloseProgressIndicatorDialog())
             if (it) {
                 showSuccessConnection(item)
@@ -72,7 +65,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     fun clickConnectionLong(connectionInfoItem: ConnectionInfoItem) {
-        val event = OpenConnectionEditDialog(connectionInfoItem) { state, item ->
+        val event = OpenConnectionEditDialog(connectionInfoItem) { state, _ ->
             if (state == -1) {
                 removeConnection(connectionInfoItem)
             } else {
@@ -81,6 +74,10 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         }
 
         postEvent(event)
+    }
+
+    fun clickAddConnection(view: View) {
+        addNewConnection()
     }
 
     private fun loadData() {

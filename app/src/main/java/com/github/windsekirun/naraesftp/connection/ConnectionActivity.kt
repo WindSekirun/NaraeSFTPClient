@@ -32,8 +32,7 @@ class ConnectionActivity : BaseActivity<ConnectionActivityBinding>() {
         viewModel = getViewModel(ConnectionViewModel::class.java)
         mBinding.viewModel = viewModel
 
-        mBinding.toolbar.inflateMenu(R.menu.menu_connection)
-        initRecyclerView(mBinding.recyclerView, ConnectionItemAdapter::class.java)
+        initRecyclerView<ConnectionItemAdapter>(mBinding.recyclerView, ConnectionItemAdapter::class.java)
     }
 
     @Subscribe

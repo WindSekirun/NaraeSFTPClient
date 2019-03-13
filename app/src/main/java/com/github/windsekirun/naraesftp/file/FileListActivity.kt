@@ -33,7 +33,7 @@ class FileListActivity : BaseActivity<FileListActivityBinding>() {
         viewModel = getViewModel(FileListViewModel::class.java)
         mBinding.viewModel = viewModel
 
-        initRecyclerView(mBinding.recyclerView, FileListItemAdapter::class.java)
+        initRecyclerView<FileListItemAdapter>(mBinding.recyclerView, FileListItemAdapter::class.java)
         mBinding.toolbar.inflateMenu(R.menu.menu_filelist)
     }
 

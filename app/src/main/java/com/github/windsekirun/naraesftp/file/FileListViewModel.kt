@@ -53,10 +53,8 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     val entries = ObservableArrayList<ChannelSftp.LsEntry>()
     val path = ObservableString()
 
-    @Inject
-    lateinit var sessionController: SessionController
-    @Inject
-    lateinit var connectionInfoController: ConnectionInfoController
+    @Inject lateinit var sessionController: SessionController
+    @Inject lateinit var connectionInfoController: ConnectionInfoController
 
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)

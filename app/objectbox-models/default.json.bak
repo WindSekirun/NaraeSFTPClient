@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:6380359857266873679",
-      "lastPropertyId": "8:6341050074299128149",
+      "lastPropertyId": "9:3721374114152841966",
       "name": "ConnectionInfoItem",
       "properties": [
         {
@@ -39,6 +39,10 @@
         {
           "id": "8:6341050074299128149",
           "name": "autoConnect"
+        },
+        {
+          "id": "9:3721374114152841966",
+          "name": "initialDirectory"
         }
       ],
       "relations": []

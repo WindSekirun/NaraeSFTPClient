@@ -21,8 +21,8 @@ class ConfirmDialog : BaseBottomSheetDialogFragment<ConfirmDialogBinding>() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
         BottomSheetDialog(requireContext(), R.style.BottomSheetDialogThemeLight)
 
-    override fun createView(layoutInflater: LayoutInflater, viewGroup: ViewGroup?) =
-        ConfirmDialogBinding.inflate(layoutInflater, viewGroup, false)
+    override fun createView(inflater: LayoutInflater, container: ViewGroup?) =
+        ConfirmDialogBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,7 +45,12 @@ class ConfirmDialog : BaseBottomSheetDialogFragment<ConfirmDialogBinding>() {
     }
 
     companion object {
-        fun show(activity: AppCompatActivity, message: String, callback: () -> Unit, closeCallback: (() -> Unit)? = null) {
+        fun show(
+            activity: AppCompatActivity,
+            message: String,
+            callback: () -> Unit,
+            closeCallback: (() -> Unit)? = null
+        ) {
             val fragment = ConfirmDialog().apply {
                 this.message.set(message)
                 this.callback = callback
