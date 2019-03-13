@@ -1,22 +1,18 @@
 package com.github.windsekirun.naraesftp.file
 
 import android.Manifest
-import android.app.Activity
-import android.content.Intent
-import android.net.Uri
-import android.os.Build
 import android.os.Environment
-import android.provider.Settings
 import android.text.TextUtils
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LifecycleOwner
 import com.github.windsekirun.baseapp.base.BaseViewModel
 import com.github.windsekirun.baseapp.module.back.DoubleBackInvoker
+import com.github.windsekirun.baseapp.module.composer.EnsureMainThreadComposer
+import com.github.windsekirun.baseapp.module.composer.single.EnsureMainThreadSingleComposer
 import com.github.windsekirun.baseapp.utils.subscribe
 import com.github.windsekirun.bindadapters.observable.ObservableString
 import com.github.windsekirun.daggerautoinject.InjectViewModel
@@ -26,10 +22,8 @@ import com.github.windsekirun.naraesftp.connection.ConnectionActivity
 import com.github.windsekirun.naraesftp.controller.ConnectionInfoController
 import com.github.windsekirun.naraesftp.controller.SessionController
 import com.github.windsekirun.naraesftp.event.*
-import com.github.windsekirun.naraesftp.extension.RxActivityResult
-import com.github.windsekirun.naraesftp.extension.getMimeType
+import com.github.windsekirun.naraesftp.extension.FileOpener
 import com.github.windsekirun.naraesftp.extension.isDirectory
-import com.github.windsekirun.naraesftp.extension.toUri
 import com.github.windsekirun.naraesftp.progress.ProgressIndicatorPercentDialog
 import com.jcraft.jsch.ChannelSftp
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -56,6 +50,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     val entries = ObservableArrayList<ChannelSftp.LsEntry>()
     val path = ObservableString()
     val filterEnable = ObservableBoolean()
+    val hasData = ObservableBoolean()
 
     @Inject lateinit var sessionController: SessionController
     @Inject lateinit var connectionInfoController: ConnectionInfoController
@@ -68,6 +63,16 @@ constructor(application: MainApplication) : BaseViewModel(application) {
             .filter { path.get() == "//" }
             .subscribe { _, _ -> path.set("/") }
             .addTo(compositeDisposable)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        FileOpener.dispose()
+    }
+
+    override fun onDestroy(owner: LifecycleOwner) {
+        super.onDestroy(owner)
+        FileOpener.dispose()
     }
 
     fun onMenuItemClick(item: MenuItem): Boolean {
@@ -99,8 +104,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         } else {
             requestPermission(
                 F0 { confirmDownloadDialog(item) },
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE
+                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE
             )
         }
     }
@@ -130,6 +134,11 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     }
 
+    fun clickFilterDisable(view: View) {
+        filterEnable.set(false)
+        loadData(path.get(), false)
+    }
+
     private fun loadData(path: String = "", backward: Boolean = false) {
         if (!sessionController.isConnected()) {
             showToast(getString(R.string.file_list_disconnected))
@@ -141,8 +150,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         postEvent(event)
 
         sessionController.getListRemoteFiles(path, backward)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .compose(EnsureMainThreadComposer())
             .subscribe { data, error ->
                 if (error != null || data == null) {
                     postEvent(CloseProgressIndicatorDialog())
@@ -152,6 +160,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
                 entries.clear()
                 entries.addAll(data)
+                hasData.set(entries.isNotEmpty())
                 this.path.set(sessionController.sFtpController.currentPath)
                 postEvent(CloseProgressIndicatorDialog())
                 postEvent(ScrollUpEvent())
@@ -169,8 +178,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     private fun tryDisconnect() {
         val connectionInfo = sessionController.connectionInfo
         connectionInfoController.setAutoConnectionFlag(connectionInfo.id, false)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .compose(EnsureMainThreadSingleComposer())
             .subscribe { data, error ->
                 if (error != null || data == null) return@subscribe
 
@@ -194,66 +202,15 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun showDownloadDialog(item: ChannelSftp.LsEntry) {
-        val event =
-            OpenProgressIndicatorPercentDialog(getString(R.string.file_list_downloading), item)
+        val event = OpenProgressIndicatorPercentDialog(getString(R.string.file_list_downloading), item)
         postEvent(event)
     }
 
     private fun openFile(file: File) {
         val event = OpenConfirmDialog(getString(R.string.file_list_open)) {
-            val uri = file.toUri(requireContext())
-
-            val intent = Intent(Intent.ACTION_VIEW).apply {
-                setDataAndType(uri, file.getMimeType())
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            }
-
-            if (file.extension.contains("apk")) {
-                if (Build.VERSION.SDK_INT >= 26 && !requireActivity().packageManager.canRequestPackageInstalls()) {
-                    showRequestUnknownAppRequest(intent)
-                } else {
-                    intent.action = Intent.ACTION_VIEW
-                    startActivity(intent)
-                }
-            } else {
-                val chooser = Intent.createChooser(intent, "Open with...")
-                startActivity(chooser)
-            }
+            FileOpener.openFile(file, requireAppCompatActivity())
         }
 
         postEvent(event)
-    }
-
-    private fun showRequestUnknownAppRequest(intent: Intent) {
-        val builder = AlertDialog.Builder(requireActivity()).apply {
-            setMessage(getString(R.string.request_package_message))
-            setCancelable(false)
-            setPositiveButton(getString(R.string.request_package_positivie)) { _, _ ->
-                requestUnknownAppSources(intent)
-            }
-            setNegativeButton(android.R.string.cancel) { _, _ -> }
-        }
-
-        builder.show()
-    }
-
-    private fun requestUnknownAppSources(intent: Intent) {
-        if (Build.VERSION.SDK_INT < 26) return
-
-        RxActivityResult.result()
-            .subscribe { data, _ ->
-                if (data.resultCode != Activity.RESULT_OK) return@subscribe
-
-                intent.action = Intent.ACTION_VIEW
-                startActivity(intent)
-            }.addTo(compositeDisposable)
-
-        RxActivityResult.startActivityForResult(
-            Intent(
-                Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
-                Uri.parse("package:${requireActivity().packageName}")
-            )
-        )
     }
 }
