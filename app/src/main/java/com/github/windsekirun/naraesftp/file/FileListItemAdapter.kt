@@ -5,13 +5,13 @@ import androidx.databinding.ViewDataBinding
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 
 import com.github.windsekirun.baseapp.module.recycler.BaseRecyclerAdapter
 import com.github.windsekirun.naraesftp.R
 import com.github.windsekirun.naraesftp.databinding.FileListItemBinding
 import com.github.windsekirun.naraesftp.event.ClickEntryItemEvent
 import com.jcraft.jsch.ChannelSftp
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 
 /**
  * NaraeSFTPClient
@@ -21,7 +21,7 @@ import com.jcraft.jsch.ChannelSftp
  *
  * Description:
  */
-class FileListItemAdapter : BaseRecyclerAdapter<ChannelSftp.LsEntry, FileListItemBinding>() {
+class FileListItemAdapter : BaseRecyclerAdapter<ChannelSftp.LsEntry, FileListItemBinding>(), FastScrollRecyclerView.SectionedAdapter {
 
     override fun bind(binding: FileListItemBinding, item: ChannelSftp.LsEntry, position: Int) {
         binding.item = item
@@ -37,5 +37,9 @@ class FileListItemAdapter : BaseRecyclerAdapter<ChannelSftp.LsEntry, FileListIte
 
     override fun createBinding(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): ViewDataBinding {
         return DataBindingUtil.inflate(inflater, R.layout.file_list_item, parent, false)
+    }
+
+    override fun getSectionName(position: Int): String {
+        return mItemList[position].filename.substring(0, 1).toUpperCase()
     }
 }

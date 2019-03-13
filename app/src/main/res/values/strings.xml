@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">NaraeSFTP</string>
     <string name="add_connection">연결 추가</string>
-    <string name="intro_desc">Simple, basic FTP client for Android</string>
+    <string name="intro_desc">Simple, basic SFTP client for Android</string>
     <string name="connection_add_title">새로운 연결을 추가해보세요.</string>
     <string name="connection_add_item_title">연결 제목</string>
     <string name="connection_add_item_host">호스트 주소</string>

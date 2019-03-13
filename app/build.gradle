@@ -163,4 +163,7 @@ dependencies {
 
     // threeten
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
+
+    // fastscroll
+    implementation 'com.simplecityapps:recyclerview-fastscroll:2.0.0'
 }
