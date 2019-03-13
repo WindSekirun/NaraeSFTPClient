@@ -10,8 +10,10 @@ import android.provider.Settings
 import android.text.TextUtils
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.ObservableArrayList
+import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LifecycleOwner
 import com.github.windsekirun.baseapp.base.BaseViewModel
 import com.github.windsekirun.baseapp.module.back.DoubleBackInvoker
@@ -53,6 +55,7 @@ class FileListViewModel @Inject
 constructor(application: MainApplication) : BaseViewModel(application) {
     val entries = ObservableArrayList<ChannelSftp.LsEntry>()
     val path = ObservableString()
+    val filterEnable = ObservableBoolean()
 
     @Inject lateinit var sessionController: SessionController
     @Inject lateinit var connectionInfoController: ConnectionInfoController
@@ -121,6 +124,10 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                 openFile(file)
             })
             .addTo(compositeDisposable)
+    }
+
+    fun clickFilter(view: View) {
+
     }
 
     private fun loadData(path: String = "", backward: Boolean = false) {

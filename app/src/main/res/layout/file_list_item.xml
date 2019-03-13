@@ -76,7 +76,7 @@
             android:layout_marginStart="8dp"
             android:textColor="@color/brownish_grey"
             android:textSize="14sp"
-            android:text="@{FileBindExtensions.getReadablePermision(item)}"
+            android:text="@{FileBindExtensions.getReadablePermission(item)}"
             app:layout_constraintStart_toEndOf="@+id/textView3"
             app:layout_constraintTop_toTopOf="@+id/textView2"
             tools:text="-rw-r--r--" />

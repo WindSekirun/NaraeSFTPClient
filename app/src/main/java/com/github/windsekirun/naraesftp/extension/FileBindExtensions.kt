@@ -11,6 +11,9 @@ import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.getFileExtension
 import kotlin.math.roundToInt
 
+private val folderIcon: Drawable? by lazy {
+    ContextCompat.getDrawable(ActivityReference.getContext(), R.drawable.ic_folder_other)
+}
 
 fun getReadableSize(item: ChannelSftp.LsEntry): String {
     val size = item.attrs.size
@@ -22,18 +25,18 @@ fun getReadableSize(item: ChannelSftp.LsEntry): String {
     return "%d%s".format(result, units[digitGroup])
 }
 
-fun getReadablePermision(item: ChannelSftp.LsEntry): String {
+fun getReadablePermission(item: ChannelSftp.LsEntry): String {
     return item.attrs.permissionsString
 }
 
 fun getReadableDate(item: ChannelSftp.LsEntry): String {
-    return (item.attrs.mTime.toLong() * 1000).asDateString("yyyy-MM-dd HH:mm:ss")
+    return (item.attrs.mTime.toLong() * 1000).asDateString("yyyy.MM.dd HH:mm:ss")
 }
 
 fun getIcon(item: ChannelSftp.LsEntry): Drawable? {
     val context = ActivityReference.getContext()
     return if (isDirectory(item)) {
-        ContextCompat.getDrawable(context, R.drawable.ic_folder_other)
+        folderIcon
     } else {
         ContextCompat.getDrawable(context, FileIconMatcher.find(item))
     }
