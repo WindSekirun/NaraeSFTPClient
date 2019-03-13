@@ -6,6 +6,7 @@ import android.view.View
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.LifecycleOwner
 import com.github.windsekirun.baseapp.base.BaseViewModel
+import com.github.windsekirun.baseapp.module.composer.single.EnsureMainThreadSingleComposer
 import com.github.windsekirun.daggerautoinject.InjectViewModel
 import com.github.windsekirun.naraesftp.MainApplication
 import com.github.windsekirun.naraesftp.R
@@ -82,8 +83,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     private fun loadData() {
         connectionInfoController.getListConnectionInfo()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .compose(EnsureMainThreadSingleComposer())
             .subscribe { data, error ->
                 if (error != null || data == null) {
                     return@subscribe
@@ -101,8 +101,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     private fun addNewConnection() {
         val event = OpenConnectionAddDialog {
             connectionInfoController.addConnectionInfo(it)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(EnsureMainThreadSingleComposer())
                 .subscribe { data, error ->
                     if (error != null || data == null) {
                         return@subscribe
@@ -135,8 +134,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     private fun moveFileListActivity(autoConnect: Boolean, item: ConnectionInfoItem) {
         connectionInfoController.setLastConnectionInfo(item.id, autoConnect)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .compose(EnsureMainThreadSingleComposer())
             .subscribe { data, error ->
                 if (error != null || data == null) {
                     return@subscribe
@@ -150,8 +148,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     private fun removeConnection(connectionInfoItem: ConnectionInfoItem) {
         connectionInfoController.removeConnectionInfo(connectionInfoItem.id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .compose(EnsureMainThreadSingleComposer())
             .subscribe { data, error ->
                 if (error != null || data == null) {
                     return@subscribe
@@ -164,8 +161,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     private fun editConnection(connectionInfoItem: ConnectionInfoItem) {
         connectionInfoController.addConnectionInfo(connectionInfoItem)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .compose(EnsureMainThreadSingleComposer())
             .subscribe { data, error ->
                 if (error != null || data == null) {
                     return@subscribe

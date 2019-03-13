@@ -21,7 +21,7 @@ class OpenProgressIndicatorDialog(val message: String)
 /**
  * Event class for close ProgressIndicatorDialog
  */
-class CloseProgressIndicatorDialog()
+class CloseProgressIndicatorDialog
 
 /**
  * Event class for open ConfirmDialog
