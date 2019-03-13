@@ -1,11 +1,9 @@
 package com.github.windsekirun.naraesftp.file
 
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
-
 import android.view.LayoutInflater
 import android.view.ViewGroup
-
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import com.github.windsekirun.baseapp.module.recycler.BaseRecyclerAdapter
 import com.github.windsekirun.naraesftp.R
 import com.github.windsekirun.naraesftp.databinding.FileListItemBinding
@@ -21,7 +19,8 @@ import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
  *
  * Description:
  */
-class FileListItemAdapter : BaseRecyclerAdapter<ChannelSftp.LsEntry, FileListItemBinding>(), FastScrollRecyclerView.SectionedAdapter {
+class FileListItemAdapter : BaseRecyclerAdapter<ChannelSftp.LsEntry, FileListItemBinding>(),
+    FastScrollRecyclerView.SectionedAdapter {
 
     override fun bind(binding: FileListItemBinding, item: ChannelSftp.LsEntry, position: Int) {
         binding.item = item

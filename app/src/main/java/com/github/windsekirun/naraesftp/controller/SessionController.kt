@@ -72,7 +72,8 @@ class SessionController(val sFtpController: SFtpController) {
      *
      *  @see [SFtpController.getListRemoteFiles] to details.
      */
-    fun getListRemoteFiles(path: String, backward: Boolean = false) = sFtpController.getListRemoteFiles(session, path, backward)
+    fun getListRemoteFiles(path: String, backward: Boolean = false) =
+        sFtpController.getListRemoteFiles(session, path, backward)
 
     @SuppressLint("CheckResult")
     private fun connectSession() {

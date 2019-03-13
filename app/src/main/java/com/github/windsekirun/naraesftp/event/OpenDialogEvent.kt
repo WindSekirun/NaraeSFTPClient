@@ -26,7 +26,11 @@ class CloseProgressIndicatorDialog
 /**
  * Event class for open ConfirmDialog
  */
-class OpenConfirmDialog constructor(val message: String, val closeCallback: (() -> Unit)? = null, val callback: () -> Unit)
+class OpenConfirmDialog constructor(
+    val message: String,
+    val closeCallback: (() -> Unit)? = null,
+    val callback: () -> Unit
+)
 
 /**
  * Event class for open ProgressIndicatorPercentDialog

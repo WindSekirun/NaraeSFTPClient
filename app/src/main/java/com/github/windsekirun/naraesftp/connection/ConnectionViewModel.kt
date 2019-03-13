@@ -1,7 +1,5 @@
 package com.github.windsekirun.naraesftp.connection
 
-import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.LifecycleOwner
@@ -15,10 +13,7 @@ import com.github.windsekirun.naraesftp.controller.SessionController
 import com.github.windsekirun.naraesftp.data.ConnectionInfoItem
 import com.github.windsekirun.naraesftp.event.*
 import com.github.windsekirun.naraesftp.file.FileListActivity
-import com.github.windsekirun.naraesftp.file.FileListViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.impl.F1
 import javax.inject.Inject
 

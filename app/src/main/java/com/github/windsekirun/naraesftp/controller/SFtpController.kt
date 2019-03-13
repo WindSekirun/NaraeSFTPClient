@@ -81,7 +81,11 @@ class SFtpController {
      *
      * @throws IOException when channelSftp.ls is null.
      */
-    fun getListRemoteFiles(session: Session, path: String, backward: Boolean = false): Observable<List<ChannelSftp.LsEntry>> {
+    fun getListRemoteFiles(
+        session: Session,
+        path: String,
+        backward: Boolean = false
+    ): Observable<List<ChannelSftp.LsEntry>> {
         currentPath = if (TextUtils.isEmpty(path)) currentPath else if (backward) path else "$currentPath$path/"
         currentPath = currentPath.replace("//", "/")
         return Observable.create { emitter ->

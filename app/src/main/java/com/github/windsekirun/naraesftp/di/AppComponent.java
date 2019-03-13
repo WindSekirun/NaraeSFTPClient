@@ -8,11 +8,12 @@ import com.github.windsekirun.daggerautoinject.FragmentModule;
 import com.github.windsekirun.daggerautoinject.ServiceModule;
 import com.github.windsekirun.daggerautoinject.ViewModelModule;
 import com.github.windsekirun.naraesftp.MainApplication;
+
+import javax.inject.Singleton;
+
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.android.support.AndroidSupportInjectionModule;
-
-import javax.inject.Singleton;
 
 @Singleton
 @Component(
