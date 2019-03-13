@@ -8,7 +8,6 @@ import android.provider.Settings
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.github.windsekirun.naraesftp.R
-import com.github.windsekirun.naraesftp.event.OpenConfirmDialog
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import java.io.File
@@ -40,13 +39,12 @@ object FileOpener {
             if (Build.VERSION.SDK_INT >= 26 && !activity.packageManager.canRequestPackageInstalls()) {
                 showRequestUnknownAppRequest(intent, activity)
             } else {
-                intent.action = Intent.ACTION_VIEW
-                activity.startActivity(intent)
+                openApk(intent, activity)
             }
-        } else {
-            val chooser = Intent.createChooser(intent, "Open with...")
-            activity.startActivity(chooser)
+            return
         }
+
+        activity.startActivity(Intent.createChooser(intent, "Open with..."))
     }
 
     private fun showRequestUnknownAppRequest(intent: Intent, activity: AppCompatActivity) {
@@ -68,9 +66,7 @@ object FileOpener {
         RxActivityResult.result()
             .subscribe { data, _ ->
                 if (data.resultCode != Activity.RESULT_OK) return@subscribe
-
-                intent.action = Intent.ACTION_VIEW
-                activity.startActivity(intent)
+                openApk(intent, activity)
             }.addTo(compositeDisposable)
 
         RxActivityResult.startActivityForResult(
@@ -79,5 +75,10 @@ object FileOpener {
                 Uri.parse("package:${activity.packageName}")
             )
         )
+    }
+
+    private fun openApk(intent: Intent, activity: AppCompatActivity) {
+        intent.action = Intent.ACTION_VIEW
+        activity.startActivity(intent)
     }
 }

@@ -40,7 +40,6 @@ import kotlin.math.roundToInt
  * Class: FileListViewModel
  * Created by Pyxis on 2018-12-27.
  *
- *
  * Description:
  */
 
@@ -109,9 +108,17 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         }
     }
 
+    fun clickFilter(view: View) {
+
+    }
+
+    fun clickFilterDisable(view: View) {
+        filterEnable.set(false)
+        loadData(path.get(), false)
+    }
+
     fun startDownload(dialog: ProgressIndicatorPercentDialog, item: ChannelSftp.LsEntry) {
-        val file = "${Environment.getExternalStorageDirectory()}/NaraeSFTP/%s".format(item.filename)
-            .toFile()
+        val file = "${Environment.getExternalStorageDirectory()}/NaraeSFTP/%s".format(item.filename).toFile()
         file.parentFile.mkdirs()
 
         sessionController.downloadFile(item.filename, file.absolutePath)
@@ -130,15 +137,6 @@ constructor(application: MainApplication) : BaseViewModel(application) {
             .addTo(compositeDisposable)
     }
 
-    fun clickFilter(view: View) {
-
-    }
-
-    fun clickFilterDisable(view: View) {
-        filterEnable.set(false)
-        loadData(path.get(), false)
-    }
-
     private fun loadData(path: String = "", backward: Boolean = false) {
         if (!sessionController.isConnected()) {
             showToast(getString(R.string.file_list_disconnected))
@@ -146,8 +144,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
             return
         }
 
-        val event = OpenProgressIndicatorDialog(getString(R.string.file_list_loading))
-        postEvent(event)
+        postEvent(OpenProgressIndicatorDialog(getString(R.string.file_list_loading)))
 
         sessionController.getListRemoteFiles(path, backward)
             .compose(EnsureMainThreadComposer())
@@ -168,11 +165,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun confirmDisconnect() {
-        val event = OpenConfirmDialog(getString(R.string.file_list_logout)) {
-            tryDisconnect()
-        }
-
-        postEvent(event)
+        postEvent(OpenConfirmDialog(getString(R.string.file_list_logout)) { tryDisconnect() })
     }
 
     private fun tryDisconnect() {
@@ -189,20 +182,11 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     private fun confirmDownloadDialog(item: ChannelSftp.LsEntry) {
         val basePath = "${Environment.getExternalStorageDirectory()}/NaraeSFTP"
-        val event = OpenConfirmDialog(
-            getString(R.string.file_list_confirm_dialog).format(
-                item.filename,
-                basePath
-            )
-        ) {
-            showDownloadDialog(item)
+        val event = OpenConfirmDialog(getString(R.string.file_list_confirm_dialog).format(item.filename, basePath)) {
+            val event = OpenProgressIndicatorPercentDialog(getString(R.string.file_list_downloading), item)
+            postEvent(event)
         }
 
-        postEvent(event)
-    }
-
-    private fun showDownloadDialog(item: ChannelSftp.LsEntry) {
-        val event = OpenProgressIndicatorPercentDialog(getString(R.string.file_list_downloading), item)
         postEvent(event)
     }
 
