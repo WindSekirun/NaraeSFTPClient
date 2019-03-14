@@ -65,7 +65,70 @@
             tools:itemCount="10"
             tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/file_list_item"
-            tools:visibility="gone" />
+            tools:visibility="visible" />
+
+        <com.github.windsekirun.naraesftp.view.SheetFab
+            android:id="@+id/fab"
+            style="@style/Widget.MaterialComponents.FloatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:backgroundTint="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/ic_plus_black_36dp"
+            app:tint="@color/white" />
+
+        <com.gordonwong.materialsheetfab.DimOverlayFrameLayout
+            android:id="@+id/overlay"
+            tools:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <io.codetail.widget.RevealLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:visibility="visible"
+            android:gravity="end|bottom"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/sheetView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/fab_create_directory"
+                        android:onClick="@{viewModel::clickCreateDirectory}"
+                        style="@style/TextAppearance.MaterialSheetFab.Sheet.Item"
+                        android:drawableStart="@drawable/ic_pencil_grey600_24dp"
+                        android:drawableLeft="@drawable/ic_pencil_grey600_24dp"
+                        android:text="@string/file_create_directory" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPrimary">
+
+                        <TextView
+                            android:onClick="@{viewModel::clickUpload}"
+                            android:id="@+id/fab_upload_file"
+                            style="@style/TextAppearance.MaterialSheetFab.Sheet.Item"
+                            android:drawableStart="@drawable/ic_upload_grey600_24dp"
+                            android:drawableLeft="@drawable/ic_upload_grey600_24dp"
+                            android:text="@string/upload_file" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </io.codetail.widget.RevealLinearLayout>
+
 
         <ImageView
             android:id="@+id/imageView3"
@@ -78,7 +141,8 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:visibility="gone" />
 
         <TextView
             android:id="@+id/textView6"
@@ -93,7 +157,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView3"
+            tools:visibility="gone" />
 
         <TextView
             android:id="@+id/textView7"
@@ -101,29 +166,29 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/file_list_disable_filter"
-            tools:visibility="gone"
             android:visibility="@{!viewModel.hasData &amp;&amp; viewModel.filterEnable}"
             app:layout_constraintBottom_toTopOf="@+id/imageButton3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+            app:layout_constraintTop_toBottomOf="@+id/textView6"
+            tools:visibility="gone" />
 
         <ImageButton
             android:id="@+id/imageButton3"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginTop="16dp"
-            tools:visibility="gone"
-            android:onClick="@{viewModel::clickFilterDisable}"
             android:background="@drawable/circle_btn"
+            android:onClick="@{viewModel::clickFilterDisable}"
             android:src="@drawable/ic_close_white_24dp"
             android:visibility="@{!viewModel.hasData &amp;&amp; viewModel.filterEnable}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+            app:layout_constraintTop_toBottomOf="@+id/textView7"
+            tools:visibility="gone" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

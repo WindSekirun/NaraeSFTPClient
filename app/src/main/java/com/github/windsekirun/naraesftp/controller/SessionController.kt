@@ -82,6 +82,13 @@ class SessionController(val sFtpController: SFtpController) {
      */
     fun getHomeDirectory() = sFtpController.getHomeDirectory(session)
 
+    /**
+     * create Directory into remote connection with given [name]
+     *
+     * @see [SFtpController.createDirectory] to details
+     */
+    fun createDirectory(name: String) = sFtpController.createDirectory(session, name)
+
     @SuppressLint("CheckResult")
     private fun connectSession() {
         sshDisposable = Observable

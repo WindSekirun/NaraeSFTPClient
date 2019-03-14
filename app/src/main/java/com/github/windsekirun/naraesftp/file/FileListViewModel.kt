@@ -9,6 +9,8 @@ import android.view.View
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LifecycleOwner
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.input.input
 import com.github.windsekirun.baseapp.base.BaseViewModel
 import com.github.windsekirun.baseapp.module.back.DoubleBackInvoker
 import com.github.windsekirun.baseapp.module.composer.EnsureMainThreadComposer
@@ -121,6 +123,19 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         loadData(path.get(), false)
     }
 
+    fun clickUpload(view: View) {
+
+    }
+
+    fun clickCreateDirectory(view: View) {
+        MaterialDialog(requireActivity()).show {
+            input { _, text ->
+                tryCreateDirectory(text)
+            }
+            positiveButton(R.string.submit)
+        }
+    }
+
     fun startDownload(dialog: ProgressIndicatorPercentDialog, item: ChannelSftp.LsEntry) {
         val file = "${Environment.getExternalStorageDirectory()}/NaraeSFTP/%s".format(item.filename).toFile()
         file.parentFile.mkdirs()
@@ -202,5 +217,16 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         }
 
         postEvent(event)
+    }
+
+    private fun tryCreateDirectory(text: CharSequence) {
+        sessionController.createDirectory(text.toString())
+            .compose(EnsureMainThreadComposer())
+            .subscribe { data, error ->
+                if (error != null || data == null) return@subscribe
+
+                showToast("생성되었습니다.")
+                loadData(sessionController.sFtpController.currentPath, true)
+            }.addTo(compositeDisposable)
     }
 }

@@ -1,6 +1,7 @@
 package com.github.windsekirun.naraesftp.file
 
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.github.windsekirun.baseapp.base.BaseActivity
@@ -11,7 +12,10 @@ import com.github.windsekirun.naraesftp.event.*
 import com.github.windsekirun.naraesftp.progress.ConfirmDialog
 import com.github.windsekirun.naraesftp.progress.ProgressIndicatorDialog
 import com.github.windsekirun.naraesftp.progress.ProgressIndicatorPercentDialog
+import com.github.windsekirun.naraesftp.view.SheetFab
+import com.gordonwong.materialsheetfab.MaterialSheetFab
 import org.greenrobot.eventbus.Subscribe
+
 
 /**
  * NaraeSFTPClient
@@ -25,6 +29,7 @@ import org.greenrobot.eventbus.Subscribe
 @InjectActivity
 class FileListActivity : BaseActivity<FileListActivityBinding>() {
     lateinit var viewModel: FileListViewModel
+    lateinit var materialSheetFab: MaterialSheetFab<SheetFab>
     private var progressIndicatorDialog: ProgressIndicatorDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,10 +40,18 @@ class FileListActivity : BaseActivity<FileListActivityBinding>() {
 
         initRecyclerView<FileListItemAdapter>(mBinding.recyclerView, FileListItemAdapter::class.java)
         mBinding.toolbar.inflateMenu(R.menu.menu_filelist)
+
+        val sheetColor = ContextCompat.getColor(this, R.color.white)
+        val fabColor = ContextCompat.getColor(this, R.color.colorPrimary)
+        materialSheetFab = MaterialSheetFab(mBinding.fab, mBinding.sheetView, mBinding.overlay, sheetColor, fabColor)
     }
 
     override fun onBackPressed() {
-        viewModel.onBackPressed()
+        if (materialSheetFab.isSheetVisible) {
+            materialSheetFab.hideSheet()
+        } else {
+            viewModel.onBackPressed()
+        }
     }
 
     @Subscribe

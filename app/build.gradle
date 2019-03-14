@@ -169,4 +169,8 @@ dependencies {
     
     // material-sheet-fab
     implementation 'com.gordonwong:material-sheet-fab:1.2.1'
+
+    // materialdialog
+    implementation 'com.afollestad.material-dialogs:core:2.0.3'
+    implementation 'com.afollestad.material-dialogs:input:2.0.3'
 }

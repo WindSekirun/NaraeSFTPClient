@@ -32,4 +32,7 @@
     <string name="request_package_positivie">설정</string>
     <string name="file_list_no_data">No Files Here!</string>
     <string name="file_list_disable_filter">필터를 설정하셨을 경우 작동을 해제해주세요.</string>
+    <string name="file_create_directory">폴더 생성</string>
+    <string name="upload_file">파일 업로드</string>
+    <string name="submit">생성</string>
 </resources>
