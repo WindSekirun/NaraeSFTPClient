@@ -30,9 +30,7 @@ class SheetFab(context: Context, attrs: AttributeSet) : FloatingActionButton(con
     override fun show(translationX: Float, translationY: Float) {
         setTranslation(translationX, translationY)
 
-        // Only use scale animation if FAB is hidden
         if (visibility != View.VISIBLE) {
-            // Pivots indicate where the animation begins from
             val pivotX = pivotX + translationX
             val pivotY = pivotY + translationY
 
@@ -48,7 +46,6 @@ class SheetFab(context: Context, attrs: AttributeSet) : FloatingActionButton(con
                 ScaleAnimation(0f, 1f, 0f, 1f, pivotX, pivotY)
             }
 
-            // Animate FAB expanding
             anim.duration = FAB_ANIM_DURATION
             anim.interpolator = getInterpolator()
             startAnimation(anim)
@@ -59,11 +56,9 @@ class SheetFab(context: Context, attrs: AttributeSet) : FloatingActionButton(con
     override fun hide() {
         super.hide()
         if (visibility == View.VISIBLE) {
-            // Pivots indicate where the animation begins from
             val pivotX = pivotX + translationX
             val pivotY = pivotY + translationY
 
-            // Animate FAB shrinking
             val anim = ScaleAnimation(1f, 0f, 1f, 0f, pivotX, pivotY)
             anim.duration = FAB_ANIM_DURATION
             anim.interpolator = getInterpolator()

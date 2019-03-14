@@ -19,7 +19,7 @@ Simple, basic SFTP client for Android, Toy-Project which started from 2019.01
  * Download and open file
  * Handle Unknown App Sources which introduced in Oreo 8.0
  * ~Upload file from Device~
- * ~Create Directory~
+ * Create Directory
  * ~Filter inner contents~
  * ~Remove remote file~
  

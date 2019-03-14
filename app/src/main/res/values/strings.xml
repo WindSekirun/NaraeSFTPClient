@@ -35,4 +35,5 @@
     <string name="file_create_directory">폴더 생성</string>
     <string name="upload_file">파일 업로드</string>
     <string name="submit">생성</string>
+    <string name="file_created_directory">생성되었습니다.</string>
 </resources>

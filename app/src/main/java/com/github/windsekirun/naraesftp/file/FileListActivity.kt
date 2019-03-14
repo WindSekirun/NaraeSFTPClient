@@ -87,4 +87,11 @@ class FileListActivity : BaseActivity<FileListActivityBinding>() {
             linearLayoutManager.scrollToPosition(0)
         }
     }
+
+    @Subscribe
+    fun onHideSheetEvent(event: HideSheetEvent) {
+        if (materialSheetFab.isSheetVisible) {
+            materialSheetFab.hideSheet()
+        }
+    }
 }

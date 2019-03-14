@@ -225,7 +225,8 @@ constructor(application: MainApplication) : BaseViewModel(application) {
             .subscribe { data, error ->
                 if (error != null || data == null) return@subscribe
 
-                showToast("생성되었습니다.")
+                showToast(getString(R.string.file_created_directory))
+                postEvent(HideSheetEvent())
                 loadData(sessionController.sFtpController.currentPath, true)
             }.addTo(compositeDisposable)
     }
