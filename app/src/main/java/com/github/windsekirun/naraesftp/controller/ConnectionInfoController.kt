@@ -16,7 +16,7 @@ import java.util.*
  *
  * Description:
  */
-class ConnectionInfoController(val application: MainApplication) {
+class ConnectionInfoController(val application: MainApplication, val sessionController: SessionController) {
     private val box: Box<ConnectionInfoItem> by lazy { application.getBox(ConnectionInfoItem::class.java) }
 
     /**
@@ -66,11 +66,13 @@ class ConnectionInfoController(val application: MainApplication) {
     /**
      * set Last, autoConnect information for [ConnectionInfoItem]
      */
-    fun setLastConnectionInfo(id: Long, autoConnect: Boolean): Single<ConnectionInfoItem> {
+    fun setLastConnectionInfo(id: Long, autoConnect: Boolean, initial: Boolean = false): Single<ConnectionInfoItem> {
         return setAutoConnectionFlag(id, autoConnect)
+            .flatMap { sessionController.getHomeDirectory() }
             .flatMap {
                 val item = box.get(id).apply {
                     this.lastConnectionTime = Date()
+                    if (initial) this.initialDirectory = it
                 }
 
                 box.put(item)

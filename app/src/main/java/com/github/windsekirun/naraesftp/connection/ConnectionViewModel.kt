@@ -41,7 +41,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         loadData()
     }
 
-    fun tryConnection(item: ConnectionInfoItem) {
+    fun tryConnection(item: ConnectionInfoItem, initial: Boolean = false) {
         val event = OpenProgressIndicatorDialog(getString(R.string.connection_connecting))
         postEvent(event)
 
@@ -49,7 +49,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         sessionController.callback = F1 {
             postEvent(CloseProgressIndicatorDialog())
             if (it) {
-                showSuccessConnection(item)
+                showSuccessConnection(item, initial)
                 sessionController.callback = null
             } else {
                 showFailConnection(item)
@@ -102,18 +102,18 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                         return@subscribe
                     }
 
-                    tryConnection(it)
+                    tryConnection(it, true)
                 }.addTo(compositeDisposable)
         }
 
         postEvent(event)
     }
 
-    private fun showSuccessConnection(item: ConnectionInfoItem) {
+    private fun showSuccessConnection(item: ConnectionInfoItem, initial: Boolean) {
         val event = OpenConfirmDialog(getString(R.string.connection_success_autoconnect), {
-            moveFileListActivity(false, item)
+            moveFileListActivity(false, item, initial)
         }) {
-            moveFileListActivity(true, item)
+            moveFileListActivity(true, item, initial)
         }
 
         postEvent(event)
@@ -127,8 +127,8 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         postEvent(event)
     }
 
-    private fun moveFileListActivity(autoConnect: Boolean, item: ConnectionInfoItem) {
-        connectionInfoController.setLastConnectionInfo(item.id, autoConnect)
+    private fun moveFileListActivity(autoConnect: Boolean, item: ConnectionInfoItem, initial: Boolean = false) {
+        connectionInfoController.setLastConnectionInfo(item.id, autoConnect, initial)
             .compose(EnsureMainThreadSingleComposer())
             .subscribe { data, error ->
                 if (error != null || data == null) {

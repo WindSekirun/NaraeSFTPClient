@@ -166,4 +166,7 @@ dependencies {
 
     // fastscroll
     implementation 'com.simplecityapps:recyclerview-fastscroll:2.0.0'
+    
+    // material-sheet-fab
+    implementation 'com.gordonwong:material-sheet-fab:1.2.1'
 }

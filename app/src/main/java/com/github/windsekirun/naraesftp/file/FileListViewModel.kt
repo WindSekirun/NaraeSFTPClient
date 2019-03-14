@@ -23,7 +23,7 @@ import com.github.windsekirun.naraesftp.controller.ConnectionInfoController
 import com.github.windsekirun.naraesftp.controller.SessionController
 import com.github.windsekirun.naraesftp.event.*
 import com.github.windsekirun.naraesftp.extension.FileOpener
-import com.github.windsekirun.naraesftp.extension.isDirectory
+import com.github.windsekirun.naraesftp.extension.file.isDirectory
 import com.github.windsekirun.naraesftp.progress.ProgressIndicatorPercentDialog
 import com.jcraft.jsch.ChannelSftp
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -83,7 +83,11 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     fun onBackPressed() {
         val currentPath = sessionController.sFtpController.currentPath
-        if (currentPath != "/") {
+        val initialDirectory = sessionController.connectionInfo.initialDirectory.let {
+            if (it.last() != '/') "$it/" else it
+        }
+
+        if (currentPath != initialDirectory) {
             val list = currentPath.split("/").toMutableList()
             if (list.last() == "") list.removeAt(list.lastIndex)
             list.removeAt(list.lastIndex)
@@ -150,6 +154,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
             .compose(EnsureMainThreadComposer())
             .subscribe { data, error ->
                 if (error != null || data == null) {
+                    hasData.set(false)
                     postEvent(CloseProgressIndicatorDialog())
                     postEvent(ScrollUpEvent())
                     return@subscribe
@@ -174,6 +179,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
             .compose(EnsureMainThreadSingleComposer())
             .subscribe { data, error ->
                 if (error != null || data == null) return@subscribe
+                sessionController.sFtpController.resetPathToRoot()
 
                 startActivity(ConnectionActivity::class.java)
                 finishAllActivities()

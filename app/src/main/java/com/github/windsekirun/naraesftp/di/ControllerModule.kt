@@ -29,6 +29,6 @@ class ControllerModule {
 
     @Provides
     @Singleton
-    fun provideConnectionInfoController(application: MainApplication): ConnectionInfoController =
-        ConnectionInfoController(application)
+    fun provideConnectionInfoController(application: MainApplication, sessionController: SessionController)
+            : ConnectionInfoController = ConnectionInfoController(application, sessionController)
 }

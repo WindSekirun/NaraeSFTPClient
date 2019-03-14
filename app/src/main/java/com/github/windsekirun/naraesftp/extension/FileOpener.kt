@@ -8,6 +8,8 @@ import android.provider.Settings
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.github.windsekirun.naraesftp.R
+import com.github.windsekirun.naraesftp.extension.file.getMimeType
+import com.github.windsekirun.naraesftp.extension.file.toUri
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import java.io.File

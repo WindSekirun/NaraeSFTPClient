@@ -16,7 +16,6 @@ import pyxis.uzuki.live.richutilskt.utils.safeInt
 
 class ConnectionAddDialog : BaseBottomSheetDialogFragment<ConnectionAddDialogBinding>() {
 
-    val directory = ObservableString("/")
     val host = ObservableString()
     val user = ObservableString()
     val password = ObservableString()
@@ -46,7 +45,6 @@ class ConnectionAddDialog : BaseBottomSheetDialogFragment<ConnectionAddDialogBin
             this.user = this@ConnectionAddDialog.user.get()
             this.pw = this@ConnectionAddDialog.password.get()
             this.port = this@ConnectionAddDialog.port.get().safeInt()
-            this.initialDirectory = this@ConnectionAddDialog.directory.get()
         }
 
         if (::callback.isInitialized) {

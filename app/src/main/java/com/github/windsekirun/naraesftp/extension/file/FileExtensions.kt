@@ -1,6 +1,6 @@
 @file:JvmName("FileExtensions")
 
-package com.github.windsekirun.naraesftp.extension
+package com.github.windsekirun.naraesftp.extension.file
 
 import android.content.Context
 import android.net.Uri

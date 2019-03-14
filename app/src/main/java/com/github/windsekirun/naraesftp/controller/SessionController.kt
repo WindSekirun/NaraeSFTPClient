@@ -75,19 +75,28 @@ class SessionController(val sFtpController: SFtpController) {
     fun getListRemoteFiles(path: String, backward: Boolean = false) =
         sFtpController.getListRemoteFiles(session, path, backward)
 
+    /**
+     * get Home directory of remote connection
+     *
+     * @see [SFtpController.getHomeDirectory] to details
+     */
+    fun getHomeDirectory() = sFtpController.getHomeDirectory(session)
+
     @SuppressLint("CheckResult")
     private fun connectSession() {
-        sshDisposable = Observable.create<Boolean> {
-            val jsch = JSch()
-            val properties = Properties().apply { setProperty("StrictHostKeyChecking", "no") }
-            session = jsch.getSession(connectionInfo.user, connectionInfo.host, connectionInfo.port).apply {
-                userInfo = connectionInfo
-                setConfig(properties)
-                connect()
-            }
+        sshDisposable = Observable
+            .create<Boolean> {
+                val jsch = JSch()
+                val properties = Properties().apply { setProperty("StrictHostKeyChecking", "no") }
+                session = jsch.getSession(connectionInfo.user, connectionInfo.host, connectionInfo.port).apply {
+                    userInfo = connectionInfo
+                    setConfig(properties)
+                    connect()
+                }
 
-            it.onNext(true)
-        }.flatMap { Observable.interval(2, TimeUnit.SECONDS) }
+                it.onNext(true)
+            }
+            .flatMap { Observable.interval(2, TimeUnit.SECONDS) }
             .flatMap { Observable.just(session.isConnected) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

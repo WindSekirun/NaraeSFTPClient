@@ -6,6 +6,7 @@ import com.jcraft.jsch.ChannelSftp
 import com.jcraft.jsch.Session
 import com.jcraft.jsch.SftpProgressMonitor
 import io.reactivex.Observable
+import io.reactivex.Single
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -141,6 +142,76 @@ class SFtpController {
             }
 
             channelSftp.get("$currentPath$srcPath", out, monitor, ChannelSftp.OVERWRITE)
+        }
+    }
+
+    /**
+     * Create directory to remote path with given [name]
+     */
+    fun createDirectory(session: Session, name: String): Observable<String> {
+        return Observable.create { emitter ->
+            if (!session.isConnected) session.connect()
+            val channelSftp = session.openSftpChannel(false)
+            channelSftp.mkdir("$currentPath/$name")
+            channelSftp.disconnect()
+
+            emitter.onNext("$currentPath/$name")
+        }
+    }
+
+    /**
+     * remove remote file with given [name]
+     */
+    fun removeFile(session: Session, name: String): Observable<String> {
+        return Observable.create { emitter ->
+            if (!session.isConnected) session.connect()
+            val channelSftp = session.openSftpChannel(false)
+            channelSftp.rm("$currentPath/$name")
+            channelSftp.disconnect()
+
+            emitter.onNext("$currentPath/$name")
+        }
+    }
+
+    /**
+     * remove remote directory with given [name]
+     */
+    fun removeDirectory(session: Session, name: String): Observable<String> {
+        return Observable.create { emitter ->
+            if (!session.isConnected) session.connect()
+            val channelSftp = session.openSftpChannel(false)
+            channelSftp.rmdir("$currentPath/$name")
+            channelSftp.disconnect()
+
+            emitter.onNext("$currentPath/$name")
+        }
+    }
+
+    /**
+     * rename remote file with given [name] to [change]
+     */
+    fun renameFile(session: Session, name: String, change: String): Observable<String> {
+        return Observable.create { emitter ->
+            if (!session.isConnected) session.connect()
+            val channelSftp = session.openSftpChannel(false)
+            channelSftp.rename("$currentPath/$name", "$currentPath/$change")
+            channelSftp.disconnect()
+
+            emitter.onNext("$currentPath/$change")
+        }
+    }
+
+    /**
+     * get Home directory of remote connection
+     */
+    fun getHomeDirectory(session: Session): Single<String> {
+        return Single.create { emitter ->
+            if (!session.isConnected) session.connect()
+            val channelSftp = session.openSftpChannel(false)
+            val home = channelSftp.home
+            channelSftp.disconnect()
+
+            emitter.onSuccess(home)
         }
     }
 
