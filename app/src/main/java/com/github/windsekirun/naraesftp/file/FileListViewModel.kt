@@ -10,6 +10,7 @@ import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LifecycleOwner
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.afollestad.materialdialogs.input.input
 import com.github.windsekirun.baseapp.base.BaseViewModel
 import com.github.windsekirun.baseapp.module.back.DoubleBackInvoker
@@ -129,10 +130,12 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     fun clickCreateDirectory(view: View) {
         MaterialDialog(requireActivity()).show {
+            title(R.string.file_create_directory)
             input { _, text ->
                 tryCreateDirectory(text)
             }
             positiveButton(R.string.submit)
+            onDismiss { postEvent(HideSheetEvent())}
         }
     }
 
@@ -226,7 +229,6 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                 if (error != null || data == null) return@subscribe
 
                 showToast(getString(R.string.file_created_directory))
-                postEvent(HideSheetEvent())
                 loadData(sessionController.sFtpController.currentPath, true)
             }.addTo(compositeDisposable)
     }
