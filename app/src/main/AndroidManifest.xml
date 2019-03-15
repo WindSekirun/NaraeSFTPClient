@@ -29,6 +29,7 @@
 
         <activity android:name=".file.FileListActivity" />
         <activity android:name=".connection.ConnectionActivity" />
+        <activity android:name=".local.LocalFileListActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
