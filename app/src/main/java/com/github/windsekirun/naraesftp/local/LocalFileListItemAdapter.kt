@@ -7,6 +7,7 @@ import androidx.databinding.ViewDataBinding
 import com.github.windsekirun.baseapp.module.recycler.BaseRecyclerAdapter
 import com.github.windsekirun.naraesftp.R
 import com.github.windsekirun.naraesftp.databinding.FileListItemBinding
+import com.github.windsekirun.naraesftp.databinding.LocalFileListItemBinding
 import com.github.windsekirun.naraesftp.event.ClickEntryItemEvent
 import com.jcraft.jsch.ChannelSftp
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
@@ -20,7 +21,7 @@ import java.io.File
  *
  * Description:
  */
-class LocalFileListItemAdapter : BaseRecyclerAdapter<File, com.github.windsekirun.naraesftp.databinding.LocalFileListItemBinding>(),
+class LocalFileListItemAdapter : BaseRecyclerAdapter<File, LocalFileListItemBinding>(),
     FastScrollRecyclerView.SectionedAdapter {
 
     override fun bind(binding: LocalFileListItemBinding, item: File, position: Int) {

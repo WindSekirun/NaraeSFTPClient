@@ -1,6 +1,8 @@
 package com.github.windsekirun.naraesftp.file
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.os.Environment
 import android.text.TextUtils
 import android.util.Log
@@ -26,7 +28,9 @@ import com.github.windsekirun.naraesftp.controller.ConnectionInfoController
 import com.github.windsekirun.naraesftp.controller.SessionController
 import com.github.windsekirun.naraesftp.event.*
 import com.github.windsekirun.naraesftp.extension.FileOpener
+import com.github.windsekirun.naraesftp.extension.RxActivityResult
 import com.github.windsekirun.naraesftp.extension.file.isDirectory
+import com.github.windsekirun.naraesftp.local.LocalFileListActivity
 import com.github.windsekirun.naraesftp.progress.ProgressIndicatorPercentDialog
 import com.jcraft.jsch.ChannelSftp
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -125,7 +129,16 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     fun clickUpload(view: View) {
+        RxActivityResult.result()
+            .subscribe { data, error ->
+                if (data == null || data.resultCode != Activity.RESULT_OK) return@subscribe
 
+            }.addTo(compositeDisposable)
+
+        RxActivityResult.startActivityForResult(
+            Intent(requireActivity(), LocalFileListActivity::class.java),
+            requestCode = 27
+        )
     }
 
     fun clickCreateDirectory(view: View) {
@@ -135,7 +148,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                 tryCreateDirectory(text)
             }
             positiveButton(R.string.submit)
-            onDismiss { postEvent(HideSheetEvent())}
+            onDismiss { postEvent(HideSheetEvent()) }
         }
     }
 
