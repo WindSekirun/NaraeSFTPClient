@@ -2,6 +2,7 @@ package com.github.windsekirun.naraesftp.di
 
 import com.github.windsekirun.naraesftp.MainApplication
 import com.github.windsekirun.naraesftp.controller.ConnectionInfoController
+import com.github.windsekirun.naraesftp.controller.LocalFileController
 import com.github.windsekirun.naraesftp.controller.SFtpController
 import com.github.windsekirun.naraesftp.controller.SessionController
 import dagger.Module
@@ -31,4 +32,8 @@ class ControllerModule {
     @Singleton
     fun provideConnectionInfoController(application: MainApplication, sessionController: SessionController)
             : ConnectionInfoController = ConnectionInfoController(application, sessionController)
+
+    @Provides
+    @Singleton
+    fun provideLocalFileController(): LocalFileController = LocalFileController()
 }

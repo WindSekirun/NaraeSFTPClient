@@ -110,7 +110,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun showSuccessConnection(item: ConnectionInfoItem, initial: Boolean) {
-        val event = OpenConfirmDialog(getString(R.string.connection_success_autoconnect), {
+        val event = OpenConfirmDialog(getString(R.string.connection_success_autoconnect), 0, {
             moveFileListActivity(false, item, initial)
         }) {
             moveFileListActivity(true, item, initial)

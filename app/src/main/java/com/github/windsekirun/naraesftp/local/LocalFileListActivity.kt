@@ -1,19 +1,14 @@
 package com.github.windsekirun.naraesftp.local
 
 import android.os.Bundle
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-
 import com.github.windsekirun.baseapp.base.BaseActivity
 import com.github.windsekirun.daggerautoinject.InjectActivity
 import com.github.windsekirun.naraesftp.R
-import com.github.windsekirun.naraesftp.databinding.FileListActivityBinding
 import com.github.windsekirun.naraesftp.event.*
-import com.github.windsekirun.naraesftp.file.FileListItemAdapter
 import com.github.windsekirun.naraesftp.progress.ConfirmDialog
 import com.github.windsekirun.naraesftp.progress.ProgressIndicatorDialog
 import com.github.windsekirun.naraesftp.progress.ProgressIndicatorPercentDialog
-import com.github.windsekirun.naraesftp.view.SheetFab
 import org.greenrobot.eventbus.Subscribe
 
 
@@ -27,8 +22,10 @@ import org.greenrobot.eventbus.Subscribe
  */
 
 @InjectActivity
-class LocalFileListActivity : BaseActivity<com.github.windsekirun.naraesftp.databinding.LocalFileListActivityBinding>() {
+class LocalFileListActivity :
+    BaseActivity<com.github.windsekirun.naraesftp.databinding.LocalFileListActivityBinding>() {
     lateinit var viewModel: LocalFileListViewModel
+    private var progressIndicatorDialog: ProgressIndicatorDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +34,52 @@ class LocalFileListActivity : BaseActivity<com.github.windsekirun.naraesftp.data
         mBinding.viewModel = viewModel
 
         initRecyclerView<LocalFileListItemAdapter>(mBinding.recyclerView, LocalFileListItemAdapter::class.java)
+    }
+
+    override fun onBackPressed() {
+        viewModel.onBackPressed()
+    }
+
+    @Subscribe
+    fun onProgressIndicatorDialog(event: OpenProgressIndicatorDialog) {
+        if (event.mode == 1) {
+            progressIndicatorDialog = ProgressIndicatorDialog.show(this, event.message)
+        }
+    }
+
+    @Subscribe
+    fun onCloseProgressIndicatorDialog(event: CloseProgressIndicatorDialog) {
+        if (event.mode == 1) {
+            progressIndicatorDialog?.dismiss()
+        }
+    }
+
+    @Subscribe
+    fun onScrollUpEvent(event: ScrollUpEvent) {
+        if (event.mode == 1) {
+            mBinding.recyclerView.post {
+                val linearLayoutManager = mBinding.recyclerView.layoutManager as LinearLayoutManager
+                linearLayoutManager.scrollToPosition(0)
+            }
+        }
+    }
+
+    @Subscribe
+    fun onOpenConfirmDialog(event: OpenConfirmDialog) {
+        if (event.mode == 1) {
+            ConfirmDialog.show(this, event.message, event.callback, event.closeCallback)
+        }
+    }
+
+    @Subscribe
+    fun onClickEntryFileEvent(event: ClickEntryFileEvent) {
+        viewModel.clickEntry(event.item)
+    }
+
+    @Subscribe
+    fun onOpenProgressIndicatorPercentFileDialog(event: OpenProgressIndicatorPercentFileDialog) {
+        val dialog = ProgressIndicatorPercentDialog.show(this, event.message)
+        viewModel.startUpload(dialog, event.item)
     }
 
 }

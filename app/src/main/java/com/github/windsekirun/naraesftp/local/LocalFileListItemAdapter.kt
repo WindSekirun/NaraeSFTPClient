@@ -6,10 +6,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.github.windsekirun.baseapp.module.recycler.BaseRecyclerAdapter
 import com.github.windsekirun.naraesftp.R
-import com.github.windsekirun.naraesftp.databinding.FileListItemBinding
 import com.github.windsekirun.naraesftp.databinding.LocalFileListItemBinding
-import com.github.windsekirun.naraesftp.event.ClickEntryItemEvent
-import com.jcraft.jsch.ChannelSftp
+import com.github.windsekirun.naraesftp.event.ClickEntryFileEvent
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import java.io.File
 
@@ -29,7 +27,7 @@ class LocalFileListItemAdapter : BaseRecyclerAdapter<File, LocalFileListItemBind
     }
 
     override fun onClickedItem(binding: LocalFileListItemBinding, item: File, position: Int) {
-
+        postEvent(ClickEntryFileEvent(item))
     }
 
     override fun onLongClickedItem(binding: LocalFileListItemBinding, item: File, position: Int): Boolean {

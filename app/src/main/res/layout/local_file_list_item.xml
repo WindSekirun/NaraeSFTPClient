@@ -20,6 +20,7 @@
         <ImageView
             android:id="@+id/imgIcon"
             android:layout_width="36dp"
+            android:src="@{FileBindExtensions.getIcon(item)}"
             android:layout_height="36dp"
             android:layout_marginStart="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -51,6 +52,7 @@
             android:layout_marginStart="8dp"
             android:textColor="@color/brownish_grey"
             android:textSize="15sp"
+            android:text="@{FileBindExtensions.getReadableSize(item)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/imgIcon"
             app:layout_constraintTop_toBottomOf="@+id/textView"
@@ -63,6 +65,7 @@
             android:layout_marginStart="8dp"
             android:textColor="@color/brownish_grey"
             android:textSize="14sp"
+            android:text="@{FileBindExtensions.getReadableDate(item)}"
             app:layout_constraintStart_toEndOf="@+id/textView2"
             app:layout_constraintTop_toTopOf="@+id/textView2"
             tools:text="2018.12.27" />

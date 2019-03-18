@@ -7,4 +7,4 @@ package com.github.windsekirun.naraesftp.event
  *
  * Description:
  */
-class ScrollUpEvent()
+class ScrollUpEvent(val mode: Int = 0)

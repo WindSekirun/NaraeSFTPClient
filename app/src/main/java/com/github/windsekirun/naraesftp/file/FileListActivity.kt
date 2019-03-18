@@ -56,17 +56,23 @@ class FileListActivity : BaseActivity<FileListActivityBinding>() {
 
     @Subscribe
     fun onProgressIndicatorDialog(event: OpenProgressIndicatorDialog) {
-        progressIndicatorDialog = ProgressIndicatorDialog.show(this, event.message)
+        if (event.mode == 0) {
+            progressIndicatorDialog = ProgressIndicatorDialog.show(this, event.message)
+        }
     }
 
     @Subscribe
     fun onCloseProgressIndicatorDialog(event: CloseProgressIndicatorDialog) {
-        progressIndicatorDialog?.dismiss()
+        if (event.mode == 0) {
+            progressIndicatorDialog?.dismiss()
+        }
     }
 
     @Subscribe
     fun onOpenConfirmDialog(event: OpenConfirmDialog) {
-        ConfirmDialog.show(this, event.message, event.callback, event.closeCallback)
+        if (event.mode == 0) {
+            ConfirmDialog.show(this, event.message, event.callback, event.closeCallback)
+        }
     }
 
     @Subscribe
@@ -82,9 +88,11 @@ class FileListActivity : BaseActivity<FileListActivityBinding>() {
 
     @Subscribe
     fun onScrollUpEvent(event: ScrollUpEvent) {
-        mBinding.recyclerView.post {
-            val linearLayoutManager = mBinding.recyclerView.layoutManager as LinearLayoutManager
-            linearLayoutManager.scrollToPosition(0)
+        if (event.mode == 0) {
+            mBinding.recyclerView.post {
+                val linearLayoutManager = mBinding.recyclerView.layoutManager as LinearLayoutManager
+                linearLayoutManager.scrollToPosition(0)
+            }
         }
     }
 
