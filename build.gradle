@@ -4,9 +4,15 @@ buildscript {
     ext.kotlin_version = '1.3.0'
     ext.objectboxVersion = '2.1.0'
     repositories {
+        maven { url 'https://repository.uzuki.live/artifactory/list/google/' }
+        maven { url 'https://repository.uzuki.live/artifactory/list/jcenter/' }
+        maven { url 'https://repository.uzuki.live/artifactory/list/jitpack/' }
+        maven { url "https://repository.uzuki.live/artifactory/list/libs-release/" }
+        maven { url 'https://repository.uzuki.live/artifactory/list/kakao/' }
+        maven { url 'https://repository.uzuki.live/artifactory/list/mavenCentral/' }
+
         google()
         jcenter()
-        maven { url "https://repository.uzuki.live/artifactory/list/libs-release-local/" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.2'
@@ -21,11 +27,17 @@ buildscript {
 
 allprojects {
     repositories {
+        maven { url 'https://repository.uzuki.live/artifactory/list/google/' }
+        maven { url 'https://repository.uzuki.live/artifactory/list/jcenter/' }
+        maven { url 'https://repository.uzuki.live/artifactory/list/jitpack/' }
+        maven { url "https://repository.uzuki.live/artifactory/list/libs-release/" }
+        maven { url 'https://repository.uzuki.live/artifactory/list/kakao/' }
+        maven { url 'https://repository.uzuki.live/artifactory/list/mavenCentral/' }
+
         google()
         jcenter()
         maven { url "https://jitpack.io" }
         maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/' }
-        maven { url "https://repository.uzuki.live/artifactory/list/libs-release-local/" }
     }
 }
 
