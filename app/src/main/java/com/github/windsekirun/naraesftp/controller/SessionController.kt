@@ -111,6 +111,7 @@ class SessionController(val sFtpController: SFtpController) {
                 if (data != null) {
                     runOnUiThread { callback?.invoke(data) }
                 } else if (throwable != null) {
+                    runOnUiThread { callback?.invoke(false) }
                     Log.e(TAG, "message: ${throwable.message}", throwable)
                 }
             }

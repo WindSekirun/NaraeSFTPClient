@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.windsekirun.baseapp.base.BaseActivity
 import com.github.windsekirun.daggerautoinject.InjectActivity
 import com.github.windsekirun.naraesftp.R
+import com.github.windsekirun.naraesftp.databinding.LocalFileListActivityBinding
 import com.github.windsekirun.naraesftp.event.*
 import com.github.windsekirun.naraesftp.progress.ConfirmDialog
 import com.github.windsekirun.naraesftp.progress.ProgressIndicatorDialog
@@ -22,14 +23,13 @@ import org.greenrobot.eventbus.Subscribe
  */
 
 @InjectActivity
-class LocalFileListActivity :
-    BaseActivity<com.github.windsekirun.naraesftp.databinding.LocalFileListActivityBinding>() {
+class LocalFileListActivity : BaseActivity<LocalFileListActivityBinding>() {
     lateinit var viewModel: LocalFileListViewModel
     private var progressIndicatorDialog: ProgressIndicatorDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.file_list_activity)
+        setContentView(R.layout.local_file_list_activity)
         viewModel = getViewModel(LocalFileListViewModel::class.java)
         mBinding.viewModel = viewModel
 

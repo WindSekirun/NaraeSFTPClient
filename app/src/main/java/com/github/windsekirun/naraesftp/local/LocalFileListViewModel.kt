@@ -32,6 +32,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     val entries = ObservableArrayList<File>()
     val path = ObservableString()
     val hasData = ObservableBoolean()
+    val filterEnable = ObservableBoolean()
 
     @Inject lateinit var sessionController: SessionController
     @Inject lateinit var localFileController: LocalFileController
